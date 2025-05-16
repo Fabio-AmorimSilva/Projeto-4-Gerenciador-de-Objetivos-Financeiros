@@ -1,0 +1,8 @@
+global using System.Reflection;
+global using FinancialGoalsManager.Application.Common.Interfaces;
+global using FinancialGoalsManager.Domain.Entities;
+global using FinancialGoalsManager.Domain.Entities.Common;
+global using FinancialGoalsManager.Infrastructure.Persistence.Interceptors;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Diagnostics;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;

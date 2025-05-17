@@ -29,5 +29,17 @@ public sealed class TransactionEntityTypeConfiguration : IEntityTypeConfiguratio
         builder
             .Property(t => t.Type)
             .IsRequired();
+        
+        builder
+            .HasOne(t => t.FinancialGoal)
+            .WithMany(fg => fg.Transactions)
+            .HasForeignKey(t => t.FinancialGoalId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(t => t.User)
+            .WithMany(u => u.Transactions)
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

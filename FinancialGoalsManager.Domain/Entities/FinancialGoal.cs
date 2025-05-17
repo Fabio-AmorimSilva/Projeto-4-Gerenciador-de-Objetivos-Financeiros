@@ -54,30 +54,4 @@ public sealed class FinancialGoal : SoftDeleteEntity
         MonthGoal = monthGoal;
         Status = status;
     }
-
-    public void AddTransaction(Transaction transaction)
-    {
-        if(transaction.Quantity < 0)
-            throw new ArgumentOutOfRangeException(ErrorMessages.HasToBeGreaterThan(nameof(transaction.Quantity), 0));
-        
-        if(transaction.Date.Date <= DateTime.Today)
-            throw new ArgumentOutOfRangeException(ErrorMessages.HasToBeGreaterThan(nameof(transaction.Date), DateTime.Today.Day));
-            
-        _transactions.Add(transaction);
-    }
-
-    public Transaction? GetTransaction(Guid transactionId)
-    {
-        return _transactions.FirstOrDefault(t => t.Id == transactionId);
-    }
-    
-    public void RemoveTransaction(Guid transactionId)
-    {
-        var transaction = GetTransaction(transactionId);
-
-        if (transaction is null)
-            throw new NotFoundException(ErrorMessages.NotFound<Transaction>());
-        
-        _transactions.Remove(transaction);
-    }
 }

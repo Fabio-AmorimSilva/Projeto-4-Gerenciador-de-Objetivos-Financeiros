@@ -39,5 +39,11 @@ public sealed class FinancialGoalEntityTypeConfiguration : IEntityTypeConfigurat
         builder
             .Property(fg => fg.Status)
             .IsRequired();
+        
+        builder
+            .HasOne(fg => fg.User)
+            .WithMany(u => u.FinancialGoals)
+            .HasForeignKey(fg => fg.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

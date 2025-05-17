@@ -9,7 +9,10 @@ public sealed class FinancialGoal : SoftDeleteEntity
     public DateTime DueDate { get; private set; }
     public decimal? MonthGoal { get; private set; }
     public GoalStatus Status { get; private set; }
-
+    
+    public Guid UserId { get; private set; }
+    public User User { get; private set; } = null!;
+    
     private readonly List<Transaction> _transactions = [];
     public IReadOnlyCollection<Transaction> Transactions => _transactions;
 
@@ -20,7 +23,8 @@ public sealed class FinancialGoal : SoftDeleteEntity
         decimal goal,
         DateTime dueDate, 
         decimal? monthGoal,
-        GoalStatus status
+        GoalStatus status,
+        User user
     )
     {
         Guard.IsNotEmpty(title);
@@ -33,6 +37,9 @@ public sealed class FinancialGoal : SoftDeleteEntity
         DueDate = dueDate;
         MonthGoal = monthGoal;
         Status = status;
+        
+        UserId = user.Id;
+        User = user;
     }
     
     public void Update(

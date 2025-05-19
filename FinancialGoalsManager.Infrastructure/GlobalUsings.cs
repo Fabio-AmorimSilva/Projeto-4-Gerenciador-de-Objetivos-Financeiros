@@ -1,10 +1,17 @@
+global using System.IdentityModel.Tokens.Jwt;
 global using System.Reflection;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;
 global using FinancialGoalsManager.Application.Common.Interfaces;
 global using FinancialGoalsManager.Domain.Entities;
 global using FinancialGoalsManager.Domain.Entities.Common;
+global using FinancialGoalsManager.Infrastructure.Auth.Services;
 global using FinancialGoalsManager.Infrastructure.Persistence;
 global using FinancialGoalsManager.Infrastructure.Persistence.Interceptors;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Options;
+global using Microsoft.IdentityModel.Tokens;

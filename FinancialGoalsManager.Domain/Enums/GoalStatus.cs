@@ -4,6 +4,6 @@ public enum GoalStatus
 {
     InProgress = 1,
     Completed = 2,
-    Canceled = 3,
-    Paused = 4
+    Cancelled = 3,
+    OnHold = 4
 }

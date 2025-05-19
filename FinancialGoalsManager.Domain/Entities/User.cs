@@ -50,6 +50,16 @@ public class User : SoftDeleteEntity
         _financialGoals.Add(financialGoal);
     }
 
+    public FinancialGoal GetGoal(Guid financialGoalId)
+    {
+        var financialGoal =  _financialGoals.FirstOrDefault(f => f.Id == financialGoalId);
+
+        if (financialGoal is null)
+            return null;
+        
+        return financialGoal;
+    }
+
     public void RemoveGoal(FinancialGoal financialGoal)
     {
         _financialGoals.Remove(financialGoal);

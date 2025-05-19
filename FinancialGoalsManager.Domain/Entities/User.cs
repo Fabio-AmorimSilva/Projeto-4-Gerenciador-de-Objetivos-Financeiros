@@ -73,6 +73,10 @@ public class User : SoftDeleteEntity
         if(transaction.Date.Date <= DateTime.Today)
             throw new ArgumentOutOfRangeException(ErrorMessages.HasToBeGreaterThan(nameof(transaction.Date), DateTime.Today.Day));
             
+        var financialGoal = GetGoal(transaction.FinancialGoalId);
+        
+        financialGoal.AddTotal(transaction.Quantity);
+        
         _transactions.Add(transaction);
     }
 

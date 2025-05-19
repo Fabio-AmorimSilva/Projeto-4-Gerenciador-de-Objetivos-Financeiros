@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialGoalsManager.Appli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialGoalsManager.Domain", "FinancialGoalsManager.Domain\FinancialGoalsManager.Domain.csproj", "{EFFC3985-3EDE-454F-8FB6-3F27275AB2A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialGoalsManager.Infrastructure", "FinancialGoalsManager.Infrastructure\FinancialGoalsManager.Infrastructure.csproj", "{904E0BB8-29F1-437B-9340-DF626A650CA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialGoalsManager.Infrastructure", "FinancialGoalsManager.Infrastructure\FinancialGoalsManager.Infrastructure.csproj", "{DDD7F097-F96B-4038-9B17-88767C94F55E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +26,9 @@ Global
 		{EFFC3985-3EDE-454F-8FB6-3F27275AB2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFFC3985-3EDE-454F-8FB6-3F27275AB2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFFC3985-3EDE-454F-8FB6-3F27275AB2A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{904E0BB8-29F1-437B-9340-DF626A650CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{904E0BB8-29F1-437B-9340-DF626A650CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{904E0BB8-29F1-437B-9340-DF626A650CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{904E0BB8-29F1-437B-9340-DF626A650CA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDD7F097-F96B-4038-9B17-88767C94F55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDD7F097-F96B-4038-9B17-88767C94F55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDD7F097-F96B-4038-9B17-88767C94F55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDD7F097-F96B-4038-9B17-88767C94F55E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

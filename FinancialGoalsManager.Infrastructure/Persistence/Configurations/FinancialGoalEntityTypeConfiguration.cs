@@ -41,6 +41,10 @@ public sealed class FinancialGoalEntityTypeConfiguration : IEntityTypeConfigurat
             .IsRequired();
         
         builder
+            .Property(fg => fg.Total)
+            .IsRequired();
+        
+        builder
             .HasOne(fg => fg.User)
             .WithMany(u => u.FinancialGoals)
             .HasForeignKey(fg => fg.UserId)

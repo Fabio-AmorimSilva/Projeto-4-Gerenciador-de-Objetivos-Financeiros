@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         );
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+        services.AddScoped<IPasswordHashService, PasswordHashService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IFinancialGoalManagerDbContext>(provider => provider.GetRequiredService<FinancialGoalManagerDbContext>());
         
         return services;

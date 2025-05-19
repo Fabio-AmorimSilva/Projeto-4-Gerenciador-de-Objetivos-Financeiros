@@ -9,6 +9,7 @@ public sealed class FinancialGoal : SoftDeleteEntity
     public DateTime DueDate { get; private set; }
     public decimal? MonthGoal { get; private set; }
     public GoalStatus Status { get; private set; }
+    public decimal Total { get; private set; }
     
     public Guid UserId { get; private set; }
     public User User { get; private set; } = null!;
@@ -60,5 +61,13 @@ public sealed class FinancialGoal : SoftDeleteEntity
         DueDate = dueDate;
         MonthGoal = monthGoal;
         Status = status;
+    }
+
+    public void AddTotal(decimal total)
+    {
+        if (total < 0)
+            return;
+        
+        Total += total;
     }
 }

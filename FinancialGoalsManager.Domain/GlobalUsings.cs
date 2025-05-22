@@ -1,5 +1,7 @@
 ﻿global using System.Security.Claims;
+global using Ardalis.Specification;
 global using CommunityToolkit.Diagnostics;
+global using FinancialGoalsManager.Domain.Entities;
 global using FinancialGoalsManager.Domain.Entities.Common;
 global using FinancialGoalsManager.Domain.Enums;
 global using FinancialGoalsManager.Domain.Exceptions;

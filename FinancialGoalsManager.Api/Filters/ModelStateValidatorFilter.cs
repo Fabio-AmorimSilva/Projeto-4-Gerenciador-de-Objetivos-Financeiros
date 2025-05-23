@@ -1,27 +1,34 @@
 ﻿namespace FinancialGoalsManager.Api.Filters;
 
-public sealed class ModelStateValidatorFilter : IAsyncActionFilter
+public sealed class ModelStateValidatorFilter(IServiceProvider serviceProvider) : IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        if (!context.ModelState.IsValid)
+        foreach (var argument in context.ActionArguments.Values)
         {
-            var errors = context.ModelState
-                .SelectMany(modelState =>
-                    modelState.Value?.Errors.Select(e => e.ErrorMessage) ??
-                    Array.Empty<string>()
-                );
-
-            var error = new Error
-            {
-                StatusCode = 422,
-                Message = errors.First()
-            };
-
-            context.HttpContext.Response.StatusCode = error.StatusCode;
-            await context.HttpContext.Response.WriteAsJsonAsync(error);
+            if (argument is null)
+                continue;
             
-            await next();
+            var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
+            var validator = serviceProvider.GetService(validatorType) as IValidator;
+
+            if (validator is not null)
+            {
+                var validationResult = await validator.ValidateAsync(new ValidationContext<object>(argument));
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                    context.Result = new BadRequestObjectResult(new Error
+                    {
+                        StatusCode = 400,
+                        Message = errors.First()
+                    });
+                    return;
+                }
+            }
         }
+        
+        await next();
     }
 }

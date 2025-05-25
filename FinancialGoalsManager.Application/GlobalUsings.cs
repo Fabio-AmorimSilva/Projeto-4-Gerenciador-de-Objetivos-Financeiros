@@ -1,3 +1,11 @@
+global using System.Reflection;
+global using Ardalis.Specification.EntityFrameworkCore;
 global using FinancialGoalsManager.Application.Common.Interfaces;
+global using FinancialGoalsManager.Application.Common.Models;
+global using FinancialGoalsManager.Application.UseCases.Users.AddUser;
 global using FinancialGoalsManager.Domain.Entities;
+global using FinancialGoalsManager.Domain.Exceptions;
+global using FinancialGoalsManager.Domain.Messages;
+global using FinancialGoalsManager.Domain.Specifications;
+global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;

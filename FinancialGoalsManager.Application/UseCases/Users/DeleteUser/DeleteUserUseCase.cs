@@ -1,4 +1,6 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
+﻿using FinancialGoalsManager.Application.Common.Responses;
+
+namespace FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
 
 public sealed class DeleteUserUseCase(IFinancialGoalManagerDbContext context) : IDeleteUserUseCase
 {

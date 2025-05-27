@@ -1,4 +1,6 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Users.UpdateUser;
+﻿using FinancialGoalsManager.Application.Common.Responses;
+
+namespace FinancialGoalsManager.Application.UseCases.Users.UpdateUser;
 
 public sealed class UpdateUserUseCase(IFinancialGoalManagerDbContext context) : IUpdateUserUseCase
 {

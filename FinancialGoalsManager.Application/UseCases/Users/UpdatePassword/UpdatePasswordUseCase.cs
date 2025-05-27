@@ -1,4 +1,6 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Users.UpdatePassword;
+﻿using FinancialGoalsManager.Application.Common.Responses;
+
+namespace FinancialGoalsManager.Application.UseCases.Users.UpdatePassword;
 
 public sealed class UpdatePasswordUseCase(IFinancialGoalManagerDbContext context) : IUpdatePasswordUseCase
 {

@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.Responses;
+﻿namespace FinancialGoalsManager.Application.Common.Responses;
 
 public class NotFoundResponse<T> : ApiResponse<T>
 {

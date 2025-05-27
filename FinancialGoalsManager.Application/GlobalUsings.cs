@@ -2,7 +2,6 @@ global using System.Reflection;
 global using Ardalis.Specification.EntityFrameworkCore;
 global using FinancialGoalsManager.Application.Common.Interfaces;
 global using FinancialGoalsManager.Application.Common.Models;
-global using FinancialGoalsManager.Application.Responses;
 global using FinancialGoalsManager.Application.UseCases.Users.AddUser;
 global using FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
 global using FinancialGoalsManager.Application.UseCases.Users.UpdatePassword;

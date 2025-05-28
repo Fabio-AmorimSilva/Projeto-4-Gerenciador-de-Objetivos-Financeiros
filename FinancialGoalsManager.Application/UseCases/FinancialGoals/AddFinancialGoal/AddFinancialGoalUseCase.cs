@@ -8,7 +8,11 @@ public sealed class AddFinancialGoalUseCase(
     public async Task<UseCaseResult<Guid>> Execute(AddFinancialGoalInputModel model)
     {
         var userId = Guid.Parse(userService.GetLoggedUserId());
-        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        
+        var user = await context.Users
+            .Include(u => u.FinancialGoals)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        
         if (user is null)
             return new NotFoundResponse<Guid>(ErrorMessages.NotFound<User>());
 

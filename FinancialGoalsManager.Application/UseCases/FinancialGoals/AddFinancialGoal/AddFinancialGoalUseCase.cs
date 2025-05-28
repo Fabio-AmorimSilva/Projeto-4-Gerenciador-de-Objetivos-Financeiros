@@ -1,0 +1,29 @@
+﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.AddFinancialGoal;
+
+public sealed class AddFinancialGoalUseCase(
+    IFinancialGoalManagerDbContext context,
+    UserService userService
+) : IAddFinancialGoalUseCase
+{
+    public async Task<UseCaseResult<Guid>> Execute(AddFinancialGoalInputModel model)
+    {
+        var userId = Guid.Parse(userService.GetLoggedUserId());
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user is null)
+            return new NotFoundResponse<Guid>(ErrorMessages.NotFound<User>());
+
+        var financialGoal = new FinancialGoal(
+            title: model.Title,
+            goal: model.Goal,
+            dueDate: model.DueDate,
+            monthGoal: model.MonthGoal,
+            status: model.Status,
+            user: user
+        );
+
+        user.AddGoal(financialGoal);
+        await context.SaveChangesAsync();
+
+        return new CreatedResponse<Guid>(financialGoal.Id);
+    }
+}

@@ -41,6 +41,7 @@ public sealed class FinancialGoal : SoftDeleteEntity
         
         UserId = user.Id;
         User = user;
+        Total = 0;
     }
     
     public void Update(

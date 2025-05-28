@@ -21,9 +21,10 @@ public sealed class ModelStateValidatorFilter(IServiceProvider serviceProvider) 
                     var errors = validationResult.Errors.Select(e => e.ErrorMessage);
                     context.Result = new BadRequestObjectResult(new Error
                     {
-                        StatusCode = 400,
+                        StatusCode = 422,
                         Message = errors.First()
                     });
+                    
                     return;
                 }
             }

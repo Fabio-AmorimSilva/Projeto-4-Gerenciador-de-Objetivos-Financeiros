@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.Common.Models;
+﻿namespace FinancialGoalsManager.Domain.Models;
 
 public class UseCaseResult
 {

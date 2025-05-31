@@ -2,5 +2,5 @@
 
 public interface IAddFinancialGoalUseCase
 {
-    Task<UseCaseResult<Guid>> Execute(AddFinancialGoalInputModel model);
+    Task<UseCaseResult<Guid>> ExecuteAsync(AddFinancialGoalInputModel model);
 }

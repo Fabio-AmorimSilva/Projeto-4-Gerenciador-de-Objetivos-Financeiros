@@ -5,7 +5,7 @@ public sealed class AddFinancialGoalUseCase(
     UserService userService
 ) : IAddFinancialGoalUseCase
 {
-    public async Task<UseCaseResult<Guid>> Execute(AddFinancialGoalInputModel model)
+    public async Task<UseCaseResult<Guid>> ExecuteAsync(AddFinancialGoalInputModel model)
     {
         var userId = userService.GetLoggedUserId();
         

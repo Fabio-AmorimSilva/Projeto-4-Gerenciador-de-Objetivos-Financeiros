@@ -10,9 +10,8 @@ public sealed class ModelStateValidatorFilter(IServiceProvider serviceProvider) 
                 continue;
             
             var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
-            var validator = serviceProvider.GetService(validatorType) as IValidator;
 
-            if (validator is not null)
+            if (serviceProvider.GetService(validatorType) is IValidator validator)
             {
                 var validationResult = await validator.ValidateAsync(new ValidationContext<object>(argument));
 

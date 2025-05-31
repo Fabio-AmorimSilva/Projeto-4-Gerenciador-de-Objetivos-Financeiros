@@ -2,5 +2,5 @@
 
 public interface IDeleteUserUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> Execute(DeleteUserInputModel model);
+    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(DeleteUserInputModel model);
 }

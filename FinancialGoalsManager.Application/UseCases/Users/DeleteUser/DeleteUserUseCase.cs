@@ -2,7 +2,7 @@
 
 public sealed class DeleteUserUseCase(IFinancialGoalManagerDbContext context) : IDeleteUserUseCase
 {
-    public async Task<UseCaseResult<UseCaseResult>> Execute(DeleteUserInputModel model)
+    public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(DeleteUserInputModel model)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.Id == model.UserId);
         if (user is null)

@@ -2,5 +2,5 @@
 
 public interface IUpdatePasswordUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> Execute(UpdatePasswordInputModel model);
+    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(UpdatePasswordInputModel model);
 }

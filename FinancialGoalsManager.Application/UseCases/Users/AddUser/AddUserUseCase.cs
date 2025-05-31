@@ -5,7 +5,7 @@ public sealed class AddUserUseCase(
     IPasswordHashService passwordHashService
 ) : IAddUserUseCase
 {
-    public async Task<UseCaseResult<Guid>> Execute(AddUserInputModel model)
+    public async Task<UseCaseResult<Guid>> ExecuteAsync(AddUserInputModel model)
     {
         var hashedPassword = passwordHashService.HashPassword(model.Password);
 

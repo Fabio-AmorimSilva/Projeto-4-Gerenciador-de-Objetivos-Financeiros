@@ -2,7 +2,7 @@
 
 public sealed class UpdateUserUseCase(IFinancialGoalManagerDbContext context) : IUpdateUserUseCase
 {
-    public async Task<UseCaseResult<UseCaseResult>> Execute(UpdateUserInputModel model)
+    public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(UpdateUserInputModel model)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.Id == model.UserId);
         if (user is null)

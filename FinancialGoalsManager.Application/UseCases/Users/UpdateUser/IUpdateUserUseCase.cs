@@ -2,5 +2,5 @@
 
 public interface IUpdateUserUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> Execute(UpdateUserInputModel model);
+    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(UpdateUserInputModel model);
 }

@@ -2,5 +2,5 @@
 
 public interface IUpdateFinancialGoalUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> Execute(Guid financialGoalId, UpdateFinancialGoalUseCaseInputModel model);
+    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(Guid financialGoalId, UpdateFinancialGoalUseCaseInputModel model);
 }

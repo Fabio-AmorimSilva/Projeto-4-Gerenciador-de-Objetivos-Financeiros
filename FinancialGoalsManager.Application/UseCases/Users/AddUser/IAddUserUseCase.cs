@@ -2,5 +2,5 @@
 
 public interface IAddUserUseCase
 {
-    Task<UseCaseResult<Guid>> Execute(AddUserInputModel model);
+    Task<UseCaseResult<Guid>> ExecuteAsync(AddUserInputModel model);
 }

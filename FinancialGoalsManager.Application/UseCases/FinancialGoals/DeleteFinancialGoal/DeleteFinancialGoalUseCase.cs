@@ -5,7 +5,7 @@ public sealed class DeleteFinancialGoalUseCase(
     IUserService userService
 ) : IDeleteFinancialGoalUseCase
 {
-    public async Task<UseCaseResult<UseCaseResult>> Execute(DeleteFinancialGoalUseCaseInputModel model)
+    public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(DeleteFinancialGoalUseCaseInputModel model)
     {
         var userId = userService.GetLoggedUserId();
         

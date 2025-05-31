@@ -50,6 +50,30 @@ public class User : SoftDeleteEntity
         _financialGoals.Add(financialGoal);
     }
 
+    public UseCaseResult<FinancialGoal> UpdateGoal(
+        Guid financialGoalId,
+        string title,
+        decimal goal,
+        DateTime dueDate, 
+        decimal? monthGoal,
+        GoalStatus status
+    )
+    {
+        var financialGoal = GetGoal(financialGoalId);
+        if (financialGoal is null)
+            return UseCaseResult<FinancialGoal>.Error(ErrorMessages.NotFound<FinancialGoal>());
+        
+        financialGoal.Update(
+            title: title,
+            goal: goal,
+            dueDate: dueDate,
+            monthGoal: monthGoal,
+            status: status
+        );
+        
+        return UseCaseResult<FinancialGoal>.Success(financialGoal);
+    }
+
     public FinancialGoal? GetGoal(Guid financialGoalId)
     {
         var financialGoal = _financialGoals.FirstOrDefault(f => f.Id == financialGoalId);

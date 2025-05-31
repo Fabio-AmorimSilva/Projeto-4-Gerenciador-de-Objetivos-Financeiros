@@ -57,7 +57,7 @@ public class User : SoftDeleteEntity
         return financialGoal;
     }
 
-    public void RemoveGoal(FinancialGoal financialGoal)
+    public void DeleteGoal(FinancialGoal financialGoal)
     {
         _financialGoals.Remove(financialGoal);
     }

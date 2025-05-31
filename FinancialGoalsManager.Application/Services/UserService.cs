@@ -1,11 +1,11 @@
 ﻿namespace FinancialGoalsManager.Application.Services;
 
-public sealed class UserService(IHttpContextAccessor acessor)
+public sealed class UserService(IHttpContextAccessor acessor) : IUserService
 {
-    public string GetLoggedUserId()
+    public Guid GetLoggedUserId()
     {
         var userId = acessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
 
-        return userId ?? string.Empty;
+        return new Guid(userId ?? string.Empty);
     }
 }

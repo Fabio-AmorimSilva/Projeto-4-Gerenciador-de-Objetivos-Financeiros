@@ -7,7 +7,7 @@ public sealed class AddFinancialGoalUseCase(
 {
     public async Task<UseCaseResult<Guid>> Execute(AddFinancialGoalInputModel model)
     {
-        var userId = Guid.Parse(userService.GetLoggedUserId());
+        var userId = userService.GetLoggedUserId();
         
         var user = await context.Users
             .Include(u => u.FinancialGoals)

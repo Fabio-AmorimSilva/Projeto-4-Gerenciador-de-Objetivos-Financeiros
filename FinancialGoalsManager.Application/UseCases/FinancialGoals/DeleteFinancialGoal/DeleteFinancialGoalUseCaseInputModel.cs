@@ -1,6 +1,6 @@
 ﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.DeleteFinancialGoal;
 
-public class DeleteFinancialGoalUseCaseInputModel
+public sealed record DeleteFinancialGoalUseCaseInputModel
 {
     public Guid FinancialGoalId { get; set; }
 }

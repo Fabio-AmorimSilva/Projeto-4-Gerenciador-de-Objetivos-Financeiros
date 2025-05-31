@@ -2,5 +2,5 @@
 
 public interface IDeleteFinancialGoalUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> Execute(DeleteFinancialGoalUseCaseInputModel inputModel);
+    Task<UseCaseResult<UseCaseResult>> Execute(DeleteFinancialGoalUseCaseInputModel model);
 }

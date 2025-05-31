@@ -5,18 +5,18 @@ public sealed class DeleteFinancialGoalUseCase(
     IUserService userService
 ) : IDeleteFinancialGoalUseCase
 {
-    public async Task<UseCaseResult<UseCaseResult>> Execute(DeleteFinancialGoalUseCaseInputModel inputModel)
+    public async Task<UseCaseResult<UseCaseResult>> Execute(DeleteFinancialGoalUseCaseInputModel model)
     {
         var userId = userService.GetLoggedUserId();
         
         var user = await context.Users
-            .Include(u => u.FinancialGoals.Where(f => f.Id == inputModel.FinancialGoalId))
+            .Include(u => u.FinancialGoals.Where(f => f.Id == model.FinancialGoalId))
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<User>());
         
-        var financialGoal = user.GetGoal(inputModel.FinancialGoalId);
+        var financialGoal = user.GetGoal(model.FinancialGoalId);
         
         if (financialGoal is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<FinancialGoal>());

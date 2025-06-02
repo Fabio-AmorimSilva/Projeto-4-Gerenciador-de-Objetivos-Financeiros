@@ -1,0 +1,24 @@
+﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.ListTransactions;
+
+public sealed class ListTransactionsUseCase(
+    IFinancialGoalManagerDbContext context,
+    IUserService userService
+) : IListTransactionUseCase
+{
+    public async Task<UseCaseResult<IEnumerable<ListTransactionUseCaseModel>>> ExecuteAsync()
+    {
+        var userId = userService.GetLoggedUserId();
+        var transactions = await context.Users
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.Transactions)
+            .Select(t => new ListTransactionUseCaseModel
+            {
+                Quantity = t.Quantity,
+                Type = t.Type,
+                Date = t.Date
+            })
+            .ToListAsync();
+
+        return new OkResponse<IEnumerable<ListTransactionUseCaseModel>>(transactions);
+    }
+}

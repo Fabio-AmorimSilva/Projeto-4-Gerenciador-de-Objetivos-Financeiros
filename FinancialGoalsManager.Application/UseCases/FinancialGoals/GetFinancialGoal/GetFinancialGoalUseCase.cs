@@ -10,6 +10,7 @@ public sealed class GetFinancialGoalUseCase(
         var userId = userService.GetLoggedUserId();
 
         var financialGoal = await context.Users
+            .Where(u => u.Id == userId)
             .SelectMany(u => u.FinancialGoals.Where(f => f.Id == financialGoalId))
             .Select(f => new GetFinancialGoalUseCaseModel
             {

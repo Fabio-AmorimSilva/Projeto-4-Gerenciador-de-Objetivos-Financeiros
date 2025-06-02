@@ -106,13 +106,8 @@ public class User : SoftDeleteEntity
         return _transactions.FirstOrDefault(t => t.Id == transactionId);
     }
     
-    public void RemoveTransaction(Guid transactionId)
+    public void DeleteTransaction(Transaction transaction)
     {
-        var transaction = GetTransaction(transactionId);
-
-        if (transaction is null)
-            throw new NotFoundException(ErrorMessages.NotFound<Transaction>());
-        
         _transactions.Remove(transaction);
     }
     

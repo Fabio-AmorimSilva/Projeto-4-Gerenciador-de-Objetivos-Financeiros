@@ -1,5 +1,9 @@
 global using FinancialGoalsManager.Api.Filters;
 global using FinancialGoalsManager.Api.Filters.Models;
+global using FinancialGoalsManager.Application.UseCases.Users.AddUser;
+global using FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
+global using FinancialGoalsManager.Application.UseCases.Users.UpdateUser;
 global using FluentValidation;
+global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Filters;

@@ -8,7 +8,17 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IUpdatePasswordUseCase, UpdatePasswordUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
+        services.AddScoped<IAddFinancialGoalUseCase, AddFinancialGoalUseCase>(); 
+        services.AddScoped<IUpdateFinancialGoalUseCase, UpdateFinancialGoalUseCase>();
+        services.AddScoped<IDeleteFinancialGoalUseCase, DeleteFinancialGoalUseCase>();
+        services.AddScoped<IGetFinancialGoalUseCase, GetFinancialGoalUseCase>();
+        services.AddScoped<IListFinancialGoalsUseCase, ListFinancialGoalsUseCase>();
+        services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
+        services.AddScoped<IDeleteTransactionUseCase, DeleteTransactionUseCase>();
+        services.AddScoped<IGetTransactionUseCase, GetTransactionUseCase>();
+        services.AddScoped<IListTransactionUseCase, ListTransactionsUseCase>();
         services.AddScoped<IUserService, UserService>();
+        
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         return services;

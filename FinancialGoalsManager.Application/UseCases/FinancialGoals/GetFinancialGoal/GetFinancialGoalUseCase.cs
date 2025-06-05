@@ -2,15 +2,13 @@
 
 public sealed class GetFinancialGoalUseCase(
     IFinancialGoalManagerDbContext context,
-    IUserService userService
+    IRequestContextService requestContextService
 ) : IGetFinancialGoalUseCase
 {
     public async Task<UseCaseResult<GetFinancialGoalUseCaseModel>> ExecuteAsync(Guid financialGoalId)
     {
-        var userId = userService.GetLoggedUserId();
-
         var financialGoal = await context.Users
-            .Where(u => u.Id == userId)
+            .Where(u => u.Id == requestContextService.UserId)
             .SelectMany(u => u.FinancialGoals.Where(f => f.Id == financialGoalId))
             .Select(f => new GetFinancialGoalUseCaseModel
             {

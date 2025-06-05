@@ -17,7 +17,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDeleteTransactionUseCase, DeleteTransactionUseCase>();
         services.AddScoped<IGetTransactionUseCase, GetTransactionUseCase>();
         services.AddScoped<IListTransactionUseCase, ListTransactionsUseCase>();
-        services.AddScoped<IUserService, UserService>();
         
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         

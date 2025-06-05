@@ -2,16 +2,14 @@
 
 public sealed class AddFinancialGoalUseCase(
     IFinancialGoalManagerDbContext context,
-    UserService userService
+    IRequestContextService requestContextService
 ) : IAddFinancialGoalUseCase
 {
     public async Task<UseCaseResult<Guid>> ExecuteAsync(AddFinancialGoalInputModel model)
     {
-        var userId = userService.GetLoggedUserId();
-        
         var user = await context.Users
             .Include(u => u.FinancialGoals)
-            .FirstOrDefaultAsync(u => u.Id == userId);
+            .FirstOrDefaultAsync(u => u.Id == requestContextService.UserId);
         
         if (user is null)
             return new NotFoundResponse<Guid>(ErrorMessages.NotFound<User>());

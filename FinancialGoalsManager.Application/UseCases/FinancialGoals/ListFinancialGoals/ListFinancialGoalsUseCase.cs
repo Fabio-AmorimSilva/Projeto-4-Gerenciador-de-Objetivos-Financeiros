@@ -2,15 +2,13 @@
 
 public sealed class ListFinancialGoalsUseCase(
     IFinancialGoalManagerDbContext context,
-    IUserService userService
+    IRequestContextService requestContextService
 ) : IListFinancialGoalsUseCase
 {
     public async Task<UseCaseResult<IEnumerable<ListFinancialGoalsUseCaseModel>>> ExecuteAsync()
     {
-        var userId = userService.GetLoggedUserId();
-        
         var financialGoals = await context.Users
-            .SelectMany(u => u.FinancialGoals.Where(f => f.UserId == userId))
+            .SelectMany(u => u.FinancialGoals.Where(f => f.UserId == requestContextService.UserId))
             .Select(f => new ListFinancialGoalsUseCaseModel
             {
                 Title = f.Title,

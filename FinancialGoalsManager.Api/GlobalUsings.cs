@@ -1,5 +1,8 @@
+global using System.Security.Claims;
 global using FinancialGoalsManager.Api.Filters;
 global using FinancialGoalsManager.Api.Filters.Models;
+global using FinancialGoalsManager.Api.Services;
+global using FinancialGoalsManager.Application.Common.Interfaces;
 global using FinancialGoalsManager.Application.UseCases.Users.AddUser;
 global using FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
 global using FinancialGoalsManager.Application.UseCases.Users.UpdateUser;

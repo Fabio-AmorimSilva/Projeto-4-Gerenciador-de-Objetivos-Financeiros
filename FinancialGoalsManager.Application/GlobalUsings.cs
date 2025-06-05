@@ -1,9 +1,7 @@
 global using System.Reflection;
-global using System.Security.Claims;
 global using Ardalis.Specification.EntityFrameworkCore;
 global using FinancialGoalsManager.Application.Common.Interfaces;
 global using FinancialGoalsManager.Application.Common.Responses;
-global using FinancialGoalsManager.Application.Services;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.AddFinancialGoal;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.DeleteFinancialGoal;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.GetFinancialGoal;
@@ -24,5 +22,4 @@ global using FinancialGoalsManager.Domain.Messages;
 global using FinancialGoalsManager.Domain.Models;
 global using FinancialGoalsManager.Domain.Specifications;
 global using FluentValidation;
-global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;

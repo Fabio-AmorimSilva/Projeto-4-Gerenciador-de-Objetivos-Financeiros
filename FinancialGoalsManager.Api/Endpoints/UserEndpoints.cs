@@ -1,6 +1,6 @@
 ﻿namespace FinancialGoalsManager.Api.Endpoints;
 
-public static class User
+public static class UserEndpoints
 {
     public static void Map(WebApplication app)
     {
@@ -9,21 +9,24 @@ public static class User
         
         const string url = "/api/users";
         
-        mapGroup.MapGet("/",[AllowAnonymous] async (AddUserInputModel model, IAddUserUseCase userCase)  =>
+        mapGroup.MapPost(
+             "/", 
+             [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
+             [AllowAnonymous] async ([FromBody] AddUserInputModel model, [FromServices] IAddUserUseCase userCase)  =>
         {
             var userId = await userCase.ExecuteAsync(model);
 
             return Results.Created(url, userId);
         });
         
-        mapGroup.MapPut("{userId:guid}/update", async (UpdateUserInputModel model, IUpdateUserUseCase userCase)  =>
+        mapGroup.MapPut("/update", async ([FromBody] UpdateUserInputModel model, [FromServices] IUpdateUserUseCase userCase)  =>
         {
             await userCase.ExecuteAsync(model);
 
             return Results.NoContent();
         });
 
-        mapGroup.MapDelete("{userId:guid}/delete", async (DeleteUserInputModel model, IDeleteUserUseCase userCase) =>
+        mapGroup.MapDelete("/delete", async ([FromBody] DeleteUserInputModel model, [FromServices] IDeleteUserUseCase userCase) =>
         {
             await userCase.ExecuteAsync(model);
 

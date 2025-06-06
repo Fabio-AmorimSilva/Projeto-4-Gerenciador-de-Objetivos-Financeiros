@@ -2,8 +2,9 @@
 
 public sealed class FinancialGoalManagerDbContext(
     DbContextOptions<FinancialGoalManagerDbContext> options
-) : DbContext(options), IFinancialGoalManagerDbContext
-{ 
+) : DbContext(options),
+    IFinancialGoalManagerDbContext
+{
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

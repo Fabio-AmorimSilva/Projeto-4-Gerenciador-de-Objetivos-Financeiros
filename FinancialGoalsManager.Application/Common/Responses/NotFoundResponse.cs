@@ -4,7 +4,7 @@ public class NotFoundResponse<T> : ApiResponse<T>
 {
     public NotFoundResponse(string message)
     {
-        Error(message);
+        Message = message;
         StatusCode = 404;
     }
 }

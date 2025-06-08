@@ -4,7 +4,7 @@ public class UnprocessableResponse<T> : ApiResponse<T>
 {
     public UnprocessableResponse(string message)
     {
-        Error(message);
+        Message = message;
         StatusCode = 422;
     }
 }

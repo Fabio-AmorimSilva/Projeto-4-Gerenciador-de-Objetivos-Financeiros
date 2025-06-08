@@ -1,34 +1,22 @@
 ﻿namespace FinancialGoalsManager.Api.Filters;
 
-public sealed class ModelStateValidatorFilter(IServiceProvider serviceProvider) : IAsyncActionFilter
+public sealed class ModelStateValidatorFilter<T> : IEndpointFilter
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        foreach (var argument in context.ActionArguments.Values)
+        var validator = context.HttpContext.RequestServices.GetRequiredService<IValidator<T>>();
+        var useCase = context.Arguments
+            .OfType<T>()
+            .FirstOrDefault(a => a.GetType() == typeof(T));
+
+        if (useCase is not null)
         {
-            if (argument is null)
-                continue;
+            var validationResult = await validator.ValidateAsync(useCase);
+            if (validationResult.IsValid)
+                return await next(context);
             
-            var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
-
-            if (serviceProvider.GetService(validatorType) is IValidator validator)
-            {
-                var validationResult = await validator.ValidateAsync(new ValidationContext<object>(argument));
-
-                if (!validationResult.IsValid)
-                {
-                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-                    context.Result = new BadRequestObjectResult(new Error
-                    {
-                        StatusCode = 422,
-                        Message = errors.First()
-                    });
-                    
-                    return;
-                }
-            }
+            return Results.UnprocessableEntity(error: new UnprocessableResponse<T>(validationResult.Errors.First().ErrorMessage));
         }
-        
-        await next();
+        return await next(context);
     }
 }

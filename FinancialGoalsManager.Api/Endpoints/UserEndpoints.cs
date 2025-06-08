@@ -17,20 +17,20 @@ public static class UserEndpoints
             var userId = await userCase.ExecuteAsync(model);
 
             return Results.Created(url, userId);
-        });
+        }).AddEndpointFilter<ModelStateValidatorFilter<AddUserInputModel>>();
         
         mapGroup.MapPut("/update", async ([FromBody] UpdateUserInputModel model, [FromServices] IUpdateUserUseCase userCase)  =>
         {
             await userCase.ExecuteAsync(model);
 
             return Results.NoContent();
-        });
+        }).AddEndpointFilter<ModelStateValidatorFilter<UpdateUserInputModel>>();
 
         mapGroup.MapDelete("/delete", async ([FromBody] DeleteUserInputModel model, [FromServices] IDeleteUserUseCase userCase) =>
         {
             await userCase.ExecuteAsync(model);
 
             return Results.NoContent();
-        });
+        }).AddEndpointFilter<ModelStateValidatorFilter<DeleteUserInputModel>>();
     }
 }

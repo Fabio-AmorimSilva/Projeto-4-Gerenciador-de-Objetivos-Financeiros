@@ -3,9 +3,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddOpenApi()
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration)
+    .AddApi();
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+UserEndpoints.Map(app);
+FinancialGoalEndpoints.Map(app);
 
 if (app.Environment.IsDevelopment())
 {

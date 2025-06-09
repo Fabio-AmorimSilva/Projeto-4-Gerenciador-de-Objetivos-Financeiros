@@ -9,8 +9,13 @@ global using FinancialGoalsManager.Application.UseCases.FinancialGoals.DeleteFin
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.GetFinancialGoal;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.ListFinancialGoals;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.UpdateFinancialGoal;
+global using FinancialGoalsManager.Application.UseCases.Transactions.AddTransaction;
+global using FinancialGoalsManager.Application.UseCases.Transactions.DeleteTransaction;
+global using FinancialGoalsManager.Application.UseCases.Transactions.GetTransaction;
+global using FinancialGoalsManager.Application.UseCases.Transactions.ListTransactions;
 global using FinancialGoalsManager.Application.UseCases.Users.AddUser;
 global using FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
+global using FinancialGoalsManager.Application.UseCases.Users.Login;
 global using FinancialGoalsManager.Application.UseCases.Users.UpdateUser;
 global using FinancialGoalsManager.Domain.Models;
 global using FluentValidation;

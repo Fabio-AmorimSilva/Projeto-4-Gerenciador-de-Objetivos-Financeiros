@@ -12,6 +12,7 @@ var app = builder.Build();
 
 UserEndpoints.Map(app);
 FinancialGoalEndpoints.Map(app);
+TransactionEndpoints.Map(app);
 
 if (app.Environment.IsDevelopment())
 {

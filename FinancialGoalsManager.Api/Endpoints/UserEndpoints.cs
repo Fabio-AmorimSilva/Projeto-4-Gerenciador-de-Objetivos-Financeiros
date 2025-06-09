@@ -8,6 +8,15 @@ public static class UserEndpoints
         
         var mapGroup = app.MapGroup(url)
             .RequireAuthorization();
+
+        mapGroup.MapGet("/login",
+            [ProducesResponseType(typeof(UseCaseResult<string>), StatusCodes.Status200OK)]
+            async (ILoginUseCase useCase, LoginUseCaseModel model) =>
+            {
+                var response = await useCase.ExecuteAsync(model);
+                
+                return Results.Ok(response);
+            });
         
         mapGroup.MapPost(
              "/", 

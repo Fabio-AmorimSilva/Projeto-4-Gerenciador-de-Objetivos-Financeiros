@@ -19,4 +19,7 @@ public static class ErrorMessages
 
     public static string EmailAlreadyExists(string email)
         => $"{email} is already registered.";
+    
+    public static string EmailOrPasswordAreIncorrect()
+        => "Email or password are incorrect.";
 }

@@ -21,12 +21,12 @@ public static class UserEndpoints
         mapGroup.MapPost(
              "/", 
              [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
-             [AllowAnonymous] async ([FromBody] AddUserInputModel model, [FromServices] IAddUserUseCase userCase)  =>
+             [AllowAnonymous] async ([FromBody] CreateUserInputModel model, [FromServices] ICreateUserUseCase userCase)  =>
         {
             var response = await userCase.ExecuteAsync(model);
 
             return Results.Created(url, response);
-        }).AddEndpointFilter<ModelStateValidatorFilter<AddUserInputModel>>();
+        }).AddEndpointFilter<ModelStateValidatorFilter<CreateUserInputModel>>();
         
         mapGroup.MapPut("/update", async ([FromBody] UpdateUserInputModel model, [FromServices] IUpdateUserUseCase userCase)  =>
         {

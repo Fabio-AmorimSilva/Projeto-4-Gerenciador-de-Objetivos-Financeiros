@@ -1,11 +1,11 @@
 ﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.AddTransaction;
 
-public sealed class AddTransactionUseCase(
+public sealed class CreateTransactionUseCase(
     IFinancialGoalManagerDbContext context,
     IRequestContextService requestContextService
-) : IAddTransactionUseCase
+) : ICreateTransactionUseCase
 {
-    public async Task<UseCaseResult<Guid>> ExecuteAsync(Guid financialGoalId, AddTransactionUseCaseInputModel model)
+    public async Task<UseCaseResult<Guid>> ExecuteAsync(Guid financialGoalId, CreateTransactionUseCaseInputModel model)
     {
         var user = await context.Users
             .Include(u => u.Transactions)

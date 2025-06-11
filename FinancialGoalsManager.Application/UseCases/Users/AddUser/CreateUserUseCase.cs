@@ -1,11 +1,11 @@
 ﻿namespace FinancialGoalsManager.Application.UseCases.Users.AddUser;
 
-public sealed class AddUserUseCase(
+public sealed class CreateUserUseCase(
     IFinancialGoalManagerDbContext context,
     IPasswordHashService passwordHashService
-) : IAddUserUseCase
+) : ICreateUserUseCase
 {
-    public async Task<UseCaseResult<Guid>> ExecuteAsync(AddUserInputModel model)
+    public async Task<UseCaseResult<Guid>> ExecuteAsync(CreateUserInputModel model)
     {
         var hashedPassword = passwordHashService.HashPassword(model.Password);
 

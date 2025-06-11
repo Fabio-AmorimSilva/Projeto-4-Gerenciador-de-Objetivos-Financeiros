@@ -1,11 +1,11 @@
 ﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.AddFinancialGoal;
 
-public sealed class AddFinancialGoalUseCase(
+public sealed class CreateFinancialGoalUseCase(
     IFinancialGoalManagerDbContext context,
     IRequestContextService requestContextService
-) : IAddFinancialGoalUseCase
+) : ICreateFinancialGoalUseCase
 {
-    public async Task<UseCaseResult<Guid>> ExecuteAsync(AddFinancialGoalInputModel model)
+    public async Task<UseCaseResult<Guid>> ExecuteAsync(CreateFinancialGoalInputModel model)
     {
         var user = await context.Users
             .Include(u => u.FinancialGoals)

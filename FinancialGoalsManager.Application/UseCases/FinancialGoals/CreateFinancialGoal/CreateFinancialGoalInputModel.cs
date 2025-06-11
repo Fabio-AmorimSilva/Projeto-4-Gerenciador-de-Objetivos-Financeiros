@@ -1,17 +1,17 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.UpdateFinancialGoal;
+﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.AddFinancialGoal;
 
-public sealed record UpdateFinancialGoalUseCaseInputModel
+public sealed record CreateFinancialGoalInputModel
 {
-    public string Title { get; set; } = null!;
-    public decimal Goal { get; set; }
-    public DateTime DueDate { get; set; }
-    public decimal? MonthGoal { get; set; }
-    public GoalStatus Status { get; set; }
+    public string Title { get; init; } = null!;
+    public decimal Goal { get; init; }
+    public DateTime DueDate { get; init; }
+    public decimal? MonthGoal { get; init; }
+    public GoalStatus Status { get; init; }
 }
 
-public class UpdateFinancialGoalUseCaseOutputModelValidator : AbstractValidator<UpdateFinancialGoalUseCaseInputModel>
+public class AddFinancialGoalInputModelValidator : AbstractValidator<CreateFinancialGoalInputModel>
 {
-    public UpdateFinancialGoalUseCaseOutputModelValidator()
+    public AddFinancialGoalInputModelValidator()
     {
         RuleFor(model => model.Title)
             .NotEmpty()

@@ -29,12 +29,12 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapPost("/",
             [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
-            async ([FromServices] IAddFinancialGoalUseCase useCase, [FromBody] AddFinancialGoalInputModel model) =>
+            async ([FromServices] ICreateFinancialGoalUseCase useCase, [FromBody] CreateFinancialGoalInputModel model) =>
             {
                 var response = await useCase.ExecuteAsync(model);
 
                 return Results.Created(url, response);
-            }).AddEndpointFilter<ModelStateValidatorFilter<AddFinancialGoalInputModel>>();
+            }).AddEndpointFilter<ModelStateValidatorFilter<CreateFinancialGoalInputModel>>();
 
         mapGroup.MapPut("/{financialGoalId:guid}/update",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]

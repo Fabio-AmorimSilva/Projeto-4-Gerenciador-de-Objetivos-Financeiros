@@ -9,7 +9,7 @@ public class DeleteFinancialGoalUseCaseInputModelValidator : AbstractValidator<D
 {
     public DeleteFinancialGoalUseCaseInputModelValidator()
     {
-        RuleFor(uc => uc.FinancialGoalId)
+        RuleFor(model => model.FinancialGoalId)
             .NotEmpty()
             .WithMessage(ErrorMessages.CannotBeEmpty(nameof(DeleteFinancialGoalUseCaseInputModel.FinancialGoalId)));
     }

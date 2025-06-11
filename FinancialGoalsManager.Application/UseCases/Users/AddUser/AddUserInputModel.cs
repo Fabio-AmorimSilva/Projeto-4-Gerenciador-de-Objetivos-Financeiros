@@ -13,7 +13,9 @@ public class AddUserInputModelValidator : AbstractValidator<AddUserInputModel>
     {
         RuleFor(m => m.Name)
             .NotEmpty()
-            .WithMessage(ErrorMessages.CannotBeEmpty(nameof(AddUserInputModel.Name)));
+            .WithMessage(ErrorMessages.CannotBeEmpty(nameof(AddUserInputModel.Name)))
+            .MaximumLength(User.MaxNameLength)
+            .WithMessage(ErrorMessages.HasMaxLength(nameof(AddUserInputModel.Name), User.MaxNameLength));
         
         RuleFor(m => m.Email)
             .NotEmpty()

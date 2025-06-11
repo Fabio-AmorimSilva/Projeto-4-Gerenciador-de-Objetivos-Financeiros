@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.AddFinancialGoal;
+﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.CreateFinancialGoal;
 
 public interface ICreateFinancialGoalUseCase
 {

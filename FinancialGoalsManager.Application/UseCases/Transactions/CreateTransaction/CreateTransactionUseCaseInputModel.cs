@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.AddTransaction;
+﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.CreateTransaction;
 
 public sealed record CreateTransactionUseCaseInputModel
 {
@@ -7,9 +7,9 @@ public sealed record CreateTransactionUseCaseInputModel
     public DateTime Date { get; set; }
 }
 
-public class AddFinancialGoalInputModelValidator : AbstractValidator<CreateTransactionUseCaseInputModel>
+public class CreateTransactionUseCaseInputModelValidator : AbstractValidator<CreateTransactionUseCaseInputModel>
 {
-    public AddFinancialGoalInputModelValidator()
+    public CreateTransactionUseCaseInputModelValidator()
     {
         RuleFor(model => model.Quantity)
             .NotEmpty()

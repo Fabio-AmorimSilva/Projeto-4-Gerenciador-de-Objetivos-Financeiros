@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.AddTransaction;
+﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.CreateTransaction;
 
 public interface ICreateTransactionUseCase
 {

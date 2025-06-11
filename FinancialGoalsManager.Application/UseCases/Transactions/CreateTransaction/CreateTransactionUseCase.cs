@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.AddTransaction;
+﻿namespace FinancialGoalsManager.Application.UseCases.Transactions.CreateTransaction;
 
 public sealed class CreateTransactionUseCase(
     IFinancialGoalManagerDbContext context,
@@ -8,7 +8,7 @@ public sealed class CreateTransactionUseCase(
     public async Task<UseCaseResult<Guid>> ExecuteAsync(Guid financialGoalId, CreateTransactionUseCaseInputModel model)
     {
         var user = await context.Users
-            .Include(u => u.Transactions)
+            .Include(u => u.Transactions.Where(t => t.FinancialGoalId == financialGoalId))
             .Include(u => u.FinancialGoals.Where(f => f.Id == financialGoalId))
             .FirstOrDefaultAsync(u => u.Id == requestContextService.UserId);
 

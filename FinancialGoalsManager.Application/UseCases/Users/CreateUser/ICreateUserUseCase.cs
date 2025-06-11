@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Application.UseCases.Users.AddUser;
+﻿namespace FinancialGoalsManager.Application.UseCases.Users.CreateUser;
 
 public interface ICreateUserUseCase
 {

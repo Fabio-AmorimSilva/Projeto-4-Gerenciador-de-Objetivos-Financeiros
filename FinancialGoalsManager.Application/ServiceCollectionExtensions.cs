@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IUpdatePasswordUseCase, UpdatePasswordUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
+        services.AddScoped<ILoginUseCase, LoginUseCase>();
         services.AddScoped<IAddFinancialGoalUseCase, AddFinancialGoalUseCase>(); 
         services.AddScoped<IUpdateFinancialGoalUseCase, UpdateFinancialGoalUseCase>();
         services.AddScoped<IDeleteFinancialGoalUseCase, DeleteFinancialGoalUseCase>();

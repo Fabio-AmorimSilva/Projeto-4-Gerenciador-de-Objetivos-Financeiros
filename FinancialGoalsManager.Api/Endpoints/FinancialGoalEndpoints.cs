@@ -4,14 +4,14 @@ public static class FinancialGoalEndpoints
 {
     public static void Map(WebApplication app)
     {
-        const string url = "/financial-goals";
+        const string url = "/api/financial-goals";
         
         var mapGroup = app.MapGroup(url)
             .RequireAuthorization();
 
         mapGroup.MapGet("/{financialGoalId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<GetFinancialGoalUseCaseModel>), StatusCodes.Status200OK)]
-            async (Guid financialGoalId, [FromServices] IGetFinancialGoalUseCase useCase) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IGetFinancialGoalUseCase useCase) =>
             {
                 var response = await useCase.ExecuteAsync(financialGoalId);
 
@@ -38,7 +38,7 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapPut("/{financialGoalId:guid}/update",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async (Guid financialGoalId, [FromServices] IUpdateFinancialGoalUseCase useCase, [FromBody] UpdateFinancialGoalUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IUpdateFinancialGoalUseCase useCase, [FromBody] UpdateFinancialGoalUseCaseInputModel model) =>
             {
                 await useCase.ExecuteAsync(financialGoalId, model);
 
@@ -47,7 +47,7 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapDelete("/{financialGoalId:guid}/delete",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async (Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase, DeleteFinancialGoalUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase, [FromBody] DeleteFinancialGoalUseCaseInputModel model) =>
             {
                 model.FinancialGoalId = financialGoalId;
 

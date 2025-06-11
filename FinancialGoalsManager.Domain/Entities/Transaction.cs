@@ -28,7 +28,7 @@ public sealed class Transaction : SoftDeleteEntity
         FinancialGoal = financialGoal;
         FinancialGoalId = financialGoal.Id;
         
-        UserId = User.Id;
+        UserId = user.Id;
         User = user;
     }
 }

@@ -29,7 +29,7 @@ public static class TransactionEndpoints
 
         mapGroup.MapPost("{financialGoalId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
-            async ([FromRoute] Guid financialGoalId, [FromServices] CreateTransactionUseCase useCase, [FromBody] CreateTransactionUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] ICreateTransactionUseCase useCase, [FromBody] CreateTransactionUseCaseInputModel model) =>
             {
                 var response = await useCase.ExecuteAsync(financialGoalId, model);
 

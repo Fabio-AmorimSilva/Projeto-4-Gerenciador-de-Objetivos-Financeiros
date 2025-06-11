@@ -11,7 +11,7 @@ public static class TransactionEndpoints
 
         mapGroup.MapGet("/",
             [ProducesResponseType(typeof(UseCaseResult<UseCaseResult<ListTransactionUseCaseModel>>), StatusCodes.Status200OK)]
-            async (Guid transactionId, IListTransactionUseCase useCase) =>
+            async ([FromServices] IListTransactionUseCase useCase) =>
             {
                 var response = await useCase.ExecuteAsync();
 
@@ -20,7 +20,7 @@ public static class TransactionEndpoints
         
         mapGroup.MapGet("/{transactionId}",
             [ProducesResponseType(typeof(UseCaseResult<UseCaseResult<GetTransactionUseCaseModel>>), StatusCodes.Status200OK)]
-            async (Guid transactionId, IGetTransactionUseCase useCase) =>
+            async ([FromRoute] Guid transactionId, [FromServices] IGetTransactionUseCase useCase) =>
             {
                 var response = await useCase.ExecuteAsync(transactionId);
 
@@ -29,7 +29,7 @@ public static class TransactionEndpoints
 
         mapGroup.MapPost("{financialGoalId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
-            async (Guid financialGoalId, AddTransactionUseCase useCase, AddTransactionUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] AddTransactionUseCase useCase, [FromBody] AddTransactionUseCaseInputModel model) =>
             {
                 var response = await useCase.ExecuteAsync(financialGoalId, model);
 
@@ -38,7 +38,7 @@ public static class TransactionEndpoints
 
         mapGroup.MapDelete("{transactionId:guid}/delete",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async (Guid financialGoalId, Guid transactionId, IDeleteTransactionUseCase useCase) =>
+            async ([FromRoute] Guid transactionId, [FromServices] IDeleteTransactionUseCase useCase) =>
             {
                 await useCase.ExecuteAsync(transactionId);
 

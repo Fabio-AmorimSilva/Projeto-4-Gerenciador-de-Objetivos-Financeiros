@@ -6,5 +6,6 @@ public class OkResponse<T> : ApiResponse<T>
     {
         Data = data;
         StatusCode = 200;
+        IsSuccess = true;
     }
 }

@@ -6,5 +6,6 @@ public class NotFoundResponse<T> : ApiResponse<T>
     {
         Message = message;
         StatusCode = 404;
+        IsSuccess = false;
     }
 }

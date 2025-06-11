@@ -6,5 +6,6 @@ public class CreatedResponse<T> : ApiResponse<T>
     {
         Data = data;
         StatusCode = 201;
+        IsSuccess = true;
     }
 }

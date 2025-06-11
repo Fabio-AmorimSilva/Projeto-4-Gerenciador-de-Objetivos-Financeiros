@@ -6,5 +6,6 @@ public class UnprocessableResponse<T> : ApiResponse<T>
     {
         Message = message;
         StatusCode = 422;
+        IsSuccess = false;
     }
 }

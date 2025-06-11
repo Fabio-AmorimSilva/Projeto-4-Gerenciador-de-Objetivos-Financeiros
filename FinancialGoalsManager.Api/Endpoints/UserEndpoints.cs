@@ -11,7 +11,7 @@ public static class UserEndpoints
 
         mapGroup.MapGet("/login",
             [ProducesResponseType(typeof(UseCaseResult<string>), StatusCodes.Status200OK)]
-            async (ILoginUseCase useCase, LoginUseCaseModel model) =>
+            [AllowAnonymous] async ([FromServices] ILoginUseCase useCase, [FromBody] LoginUseCaseModel model) =>
             {
                 var response = await useCase.ExecuteAsync(model);
                 

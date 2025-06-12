@@ -24,7 +24,7 @@ public sealed class UpdateFinancialGoalUseCase(
         );
         
         if(!result.IsSuccess)
-            return new NotFoundResponse<UseCaseResult>(result.Message);
+            return new UnprocessableResponse<UseCaseResult>(result.Message);
         
         await context.SaveChangesAsync();
 

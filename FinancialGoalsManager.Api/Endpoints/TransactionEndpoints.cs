@@ -34,7 +34,8 @@ public static class TransactionEndpoints
                 var response = await useCase.ExecuteAsync(financialGoalId, model);
 
                 return Results.Created(url, response);
-            });
+            })
+            .AddEndpointFilter<ModelStateValidatorFilter<CreateTransactionUseCaseInputModel>>();
 
         mapGroup.MapDelete("{transactionId:guid}/delete",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]

@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDeleteFinancialGoalUseCase, DeleteFinancialGoalUseCase>();
         services.AddScoped<IGetFinancialGoalUseCase, GetFinancialGoalUseCase>();
         services.AddScoped<IListFinancialGoalsUseCase, ListFinancialGoalsUseCase>();
+        services.AddScoped<ISimulateFinancialGoalProgressUseCase, SimulateFinancialGoalProgressUseCase>();
         services.AddScoped<ICreateTransactionUseCase, CreateTransactionUseCase>();
         services.AddScoped<IDeleteTransactionUseCase, DeleteTransactionUseCase>();
         services.AddScoped<IGetTransactionUseCase, GetTransactionUseCase>();

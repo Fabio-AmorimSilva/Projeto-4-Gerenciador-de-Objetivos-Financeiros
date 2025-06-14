@@ -9,6 +9,15 @@ public static class FinancialGoalEndpoints
         var mapGroup = app.MapGroup(url)
             .RequireAuthorization();
 
+        mapGroup.MapGet("/financial-progress",
+            [ProducesResponseType(typeof(UseCaseResult<SimulateFinancialGoalProgressUseCaseOuputModel>), StatusCodes.Status200OK)]
+            ([FromServices] ISimulateFinancialGoalProgressUseCase useCase, [FromBody] SimulateFinancialGoalProgressUseCaseInputModel model) =>
+            {
+                var response = useCase.Execute(model);
+                
+                return Results.Ok(response);
+            });
+        
         mapGroup.MapGet("/{financialGoalId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<GetFinancialGoalUseCaseModel>), StatusCodes.Status200OK)]
             async ([FromRoute] Guid financialGoalId, [FromServices] IGetFinancialGoalUseCase useCase) =>

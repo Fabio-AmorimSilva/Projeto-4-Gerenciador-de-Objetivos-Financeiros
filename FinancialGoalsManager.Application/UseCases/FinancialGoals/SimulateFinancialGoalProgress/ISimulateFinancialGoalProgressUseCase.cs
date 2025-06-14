@@ -1,0 +1,6 @@
+﻿namespace FinancialGoalsManager.Application.UseCases.FinancialGoals.SimulateFinancialGoalProgress;
+
+public interface ISimulateFinancialGoalProgressUseCase
+{
+    UseCaseResult<IEnumerable<SimulateFinancialGoalProgressUseCaseOuputModel>> Execute(SimulateFinancialGoalProgressUseCaseInputModel model);
+}

@@ -27,6 +27,15 @@ public static class FinancialGoalEndpoints
                 return Results.Ok(response);
             });
 
+        mapGroup.MapGet("/financial-report",
+            [ProducesResponseType(typeof(TrackFinancialGoalsReportUseCaseOutputModel), StatusCodes.Status200OK)]
+            async ([FromServices] ITrackFinancialGoalsReportUseCase useCase) =>
+            {
+                var response = await useCase.ExecuteAsync();
+
+                return Results.Ok(response);
+            });
+
         mapGroup.MapGet("/{financialGoalId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<GetFinancialGoalUseCaseModel>), StatusCodes.Status200OK)]
             async ([FromRoute] Guid financialGoalId, [FromServices] IGetFinancialGoalUseCase useCase) =>
@@ -56,7 +65,8 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapPut("/{financialGoalId:guid}/update",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async ([FromRoute] Guid financialGoalId, [FromServices] IUpdateFinancialGoalUseCase useCase, [FromBody] UpdateFinancialGoalUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IUpdateFinancialGoalUseCase useCase,
+                [FromBody] UpdateFinancialGoalUseCaseInputModel model) =>
             {
                 await useCase.ExecuteAsync(financialGoalId, model);
 
@@ -65,7 +75,8 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapDelete("/{financialGoalId:guid}/delete",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async ([FromRoute] Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase, [FromBody] DeleteFinancialGoalUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase,
+                [FromBody] DeleteFinancialGoalUseCaseInputModel model) =>
             {
                 model.FinancialGoalId = financialGoalId;
 

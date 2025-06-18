@@ -9,6 +9,8 @@ global using FinancialGoalsManager.Application.UseCases.FinancialGoals.DeleteFin
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.GetFinancialGoal;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.ListFinancialGoals;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.SimulateFinancialGoalProgress;
+global using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalProgress;
+global using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalsReport;
 global using FinancialGoalsManager.Application.UseCases.FinancialGoals.UpdateFinancialGoal;
 global using FinancialGoalsManager.Application.UseCases.Transactions.CreateTransaction;
 global using FinancialGoalsManager.Application.UseCases.Transactions.DeleteTransaction;

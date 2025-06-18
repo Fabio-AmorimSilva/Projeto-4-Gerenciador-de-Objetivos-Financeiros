@@ -17,6 +17,7 @@ global using FinancialGoalsManager.Application.UseCases.Users.DeleteUser;
 global using FinancialGoalsManager.Application.UseCases.Users.Login;
 global using FinancialGoalsManager.Application.UseCases.Users.UpdatePassword;
 global using FinancialGoalsManager.Application.UseCases.Users.UpdateUser;
+global using FinancialGoalsManager.Domain.Common.Interfaces;
 global using FinancialGoalsManager.Domain.Entities;
 global using FinancialGoalsManager.Domain.Enums;
 global using FinancialGoalsManager.Domain.Exceptions;

@@ -3,5 +3,4 @@
 public interface ITrackFinancialGoalsReportUseCase
 {
     Task<UseCaseResult<TrackFinancialGoalsReportUseCaseOutputModel>> ExecuteAsync();
-
 }

@@ -22,5 +22,6 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
 global using QuestPDF.Fluent;
-global using QuestPDF.Helpers;
 global using QuestPDF.Infrastructure;
+global using ScottPlot;
+global using Colors = QuestPDF.Helpers.Colors;

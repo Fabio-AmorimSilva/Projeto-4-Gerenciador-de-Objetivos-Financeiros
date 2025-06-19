@@ -1,4 +1,5 @@
 ﻿using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalProgress;
+using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalsReport;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IListFinancialGoalsUseCase, ListFinancialGoalsUseCase>();
         services.AddScoped<ISimulateFinancialGoalProgressUseCase, SimulateFinancialGoalProgressUseCase>();
         services.AddScoped<ITrackFinancialGoalProgress, TrackFinancialGoalProgressUseCase>();
+        services.AddScoped<ITrackFinancialGoalsReportUseCase, TrackFinancialGoalsReportUseCase>();
         services.AddScoped<ICreateTransactionUseCase, CreateTransactionUseCase>();
         services.AddScoped<IDeleteTransactionUseCase, DeleteTransactionUseCase>();
         services.AddScoped<IGetTransactionUseCase, GetTransactionUseCase>();

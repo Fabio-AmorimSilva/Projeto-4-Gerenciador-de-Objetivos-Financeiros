@@ -33,7 +33,7 @@ public static class FinancialGoalEndpoints
             {
                 var response = await useCase.ExecuteAsync();
 
-                return Results.Ok(response);
+                return Results.Bytes(response.Data.Data);
             });
 
         mapGroup.MapGet("/{financialGoalId:guid}",

@@ -10,56 +10,72 @@ public static class FinancialGoalReport
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.A4);
-                page.Margin(2, Unit.Centimetre);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(ts => ts.FontSize(12));
+                page.Content().Column(column =>
+                {
+                    column
+                        .Spacing(10);
 
-                page
-                    .Header()
-                    .Text("Financial Goal Tracking Report")
-                    .WordSpacing()
-                    .FontSize(24)
-                    .Bold()
-                    .AlignCenter();
-                
-                page
-                    .Content()
-                    .PaddingVertical(1, Unit.Centimetre)
-                    .Table(t =>
-                    {
-                        t.ColumnsDefinition(cd =>
+                    column
+                        .Item()
+                        .Text("Financial Goal Tracking")
+                        .AlignCenter()
+                        .Bold();
+
+                    column
+                        .Item()
+                        .AspectRatio(2)
+                        .Svg(size =>
                         {
-                            cd.RelativeColumn(500);
-                            cd.RelativeColumn(500);
-                            cd.RelativeColumn(500);
+                            Plot plot = new();
+
+                            var bars = new List<Bar>();
+                            var barIndex = 0;
+
+                            foreach (var financialGoal in financialGoals)
+                            {
+                                bars.Add(new Bar { Position = barIndex, Value = (double)financialGoal.Total } );
+
+                                barIndex++;
+                            }
+
+                            foreach (var bar in bars)
+                            {
+                                bar.FillColor = new ScottPlot.Color(Colors.Blue.Medium.Hex);
+                                bar.LineWidth = 0;
+                                bar.Size = 0.15;
+                            }
+
+                            plot.Add.Bars(bars);
+
+                            var ticks = new List<Tick>();
+                            var tickIndex = 0;
+
+                            foreach (var financialGoal in financialGoals)
+                            {
+                                ticks.Add(new Tick(position: tickIndex, label: $"{financialGoal.Month}/{financialGoal.Year}"));
+
+                                tickIndex++;
+                            }
+
+                            plot.Legend = new Legend(plot);
+                            plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
+                            plot.Axes.Bottom.MajorTickStyle.Length = 0;
+                            plot.Axes.Bottom.TickLabelStyle.FontName = "Lato";
+                            plot.Axes.Bottom.TickLabelStyle.FontSize = 16;
+                            plot.Axes.Bottom.TickLabelStyle.OffsetY = 8;
+                            plot.Grid.XAxisStyle.IsVisible = false;
+
+                            plot.Axes.Margins(bottom: 0, top: 0.25f);
+
+                            return plot.GetSvgXml((int)size.Width, (int)size.Height);
                         });
-                        
-                        t.Header(th =>
-                        {
-                            th.Cell().Row(1).Column(1).Element(Block).Text("Month");
-                            th.Cell().Row(1).Column(1).Element(Block).Text("Year");
-                            th.Cell().Row(1).Column(1).Element(Block).Text("Total");
-                        });
-
-                        uint rowIndex = 2;
-
-                        foreach (var financialGoal in financialGoals)
-                        {
-                            t.Cell().Row(rowIndex).Column(1).Element(Entry).Text(financialGoal.Month.ToString());
-                            t.Cell().Row(rowIndex).Column(1).Element(Entry).Text(financialGoal.Year.ToString());
-                            t.Cell().Row(rowIndex).Column(1).Element(Entry).Text(financialGoal.Total.ToString(CultureInfo.CurrentCulture));
-                            
-                            rowIndex++;
-                        }
-
-                    });
+                });
             });
         });
 
         return document.GeneratePdf();
     }
-    
+
     private static IContainer Entry(IContainer container)
         => container
             .BorderBottom(2)
@@ -79,5 +95,4 @@ public static class FinancialGoalReport
             .MinWidth(20)
             .AlignCenter()
             .AlignMiddle();
-    
 }

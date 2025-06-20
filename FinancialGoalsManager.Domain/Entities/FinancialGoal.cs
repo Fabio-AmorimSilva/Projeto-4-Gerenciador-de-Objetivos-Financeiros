@@ -24,7 +24,6 @@ public sealed class FinancialGoal : SoftDeleteEntity
         decimal goal,
         DateTime dueDate, 
         decimal? monthGoal,
-        GoalStatus status,
         User user
     )
     {
@@ -37,7 +36,7 @@ public sealed class FinancialGoal : SoftDeleteEntity
         Goal = goal;
         DueDate = dueDate;
         MonthGoal = monthGoal;
-        Status = status;
+        Status = GoalStatus.InProgress;
         
         UserId = user.Id;
         User = user;
@@ -48,8 +47,7 @@ public sealed class FinancialGoal : SoftDeleteEntity
         string title,
         decimal goal,
         DateTime dueDate, 
-        decimal? monthGoal,
-        GoalStatus status
+        decimal? monthGoal
     )
     {
         Guard.IsNotEmpty(title);
@@ -61,7 +59,6 @@ public sealed class FinancialGoal : SoftDeleteEntity
         Goal = goal;
         DueDate = dueDate;
         MonthGoal = monthGoal;
-        Status = status;
     }
 
     public void AddTotal(decimal total)

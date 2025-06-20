@@ -19,7 +19,6 @@ public sealed class CreateFinancialGoalUseCase(
             goal: model.Goal,
             dueDate: model.DueDate,
             monthGoal: model.MonthGoal,
-            status: model.Status,
             user: user
         );
 

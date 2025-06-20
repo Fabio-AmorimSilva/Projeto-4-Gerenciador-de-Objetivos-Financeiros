@@ -6,7 +6,6 @@ public sealed record CreateFinancialGoalInputModel
     public decimal Goal { get; init; }
     public DateTime DueDate { get; init; }
     public decimal? MonthGoal { get; init; }
-    public GoalStatus Status { get; init; }
 }
 
 public class AddFinancialGoalInputModelValidator : AbstractValidator<CreateFinancialGoalInputModel>
@@ -30,9 +29,5 @@ public class AddFinancialGoalInputModelValidator : AbstractValidator<CreateFinan
         RuleFor(model => model.MonthGoal)
             .NotEmpty()
             .WithMessage(ErrorMessages.CannotBeEmpty(nameof(CreateFinancialGoalInputModel.MonthGoal)));
-
-        RuleFor(model => model.Status)
-            .NotEmpty()
-            .WithMessage(ErrorMessages.CannotBeEmpty(nameof(CreateFinancialGoalInputModel.Status)));
     }
 }

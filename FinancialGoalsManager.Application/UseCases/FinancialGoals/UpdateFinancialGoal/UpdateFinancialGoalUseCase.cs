@@ -19,8 +19,7 @@ public sealed class UpdateFinancialGoalUseCase(
             dueDate: model.DueDate,
             monthGoal: model.MonthGoal,
             title: model.Title,
-            goal: model.Goal,
-            status: model.Status
+            goal: model.Goal
         );
         
         if(!result.IsSuccess)

@@ -6,7 +6,6 @@ public sealed record UpdateFinancialGoalUseCaseInputModel
     public decimal Goal { get; set; }
     public DateTime DueDate { get; set; }
     public decimal? MonthGoal { get; set; }
-    public GoalStatus Status { get; set; }
 }
 
 public class UpdateFinancialGoalUseCaseOutputModelValidator : AbstractValidator<UpdateFinancialGoalUseCaseInputModel>
@@ -30,9 +29,5 @@ public class UpdateFinancialGoalUseCaseOutputModelValidator : AbstractValidator<
         RuleFor(model => model.MonthGoal)
             .NotEmpty()
             .WithMessage(ErrorMessages.CannotBeEmpty(nameof(CreateFinancialGoalInputModel.MonthGoal)));
-
-        RuleFor(model => model.Status)
-            .NotEmpty()
-            .WithMessage(ErrorMessages.CannotBeEmpty(nameof(CreateFinancialGoalInputModel.Status)));
     }
 }

@@ -55,8 +55,7 @@ public class User : SoftDeleteEntity
         string title,
         decimal goal,
         DateTime dueDate, 
-        decimal? monthGoal,
-        GoalStatus status
+        decimal? monthGoal
     )
     {
         var financialGoal = GetGoal(financialGoalId);
@@ -67,8 +66,7 @@ public class User : SoftDeleteEntity
             title: title,
             goal: goal,
             dueDate: dueDate,
-            monthGoal: monthGoal,
-            status: status
+            monthGoal: monthGoal
         );
         
         return UseCaseResult<FinancialGoal>.Success(financialGoal);

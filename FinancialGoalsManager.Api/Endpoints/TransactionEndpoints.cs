@@ -18,7 +18,7 @@ public static class TransactionEndpoints
                 return Results.Ok(response);
             });
         
-        mapGroup.MapGet("/{transactionId}",
+        mapGroup.MapGet("/{transactionId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<UseCaseResult<GetTransactionUseCaseModel>>), StatusCodes.Status200OK)]
             async ([FromRoute] Guid transactionId, [FromServices] IGetTransactionUseCase useCase) =>
             {

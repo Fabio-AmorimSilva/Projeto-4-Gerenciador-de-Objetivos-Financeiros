@@ -17,6 +17,7 @@ public sealed class ModelStateValidatorFilter<T> : IEndpointFilter
             
             return Results.UnprocessableEntity(error: new UnprocessableResponse<T>(validationResult.Errors.First().ErrorMessage));
         }
+        
         return await next(context);
     }
 }

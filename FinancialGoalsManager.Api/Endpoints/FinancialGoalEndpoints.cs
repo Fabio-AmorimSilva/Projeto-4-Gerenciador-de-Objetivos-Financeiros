@@ -75,12 +75,9 @@ public static class FinancialGoalEndpoints
 
         mapGroup.MapDelete("/{financialGoalId:guid}/delete",
             [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async ([FromRoute] Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase,
-                [FromBody] DeleteFinancialGoalUseCaseInputModel model) =>
+            async ([FromRoute] Guid financialGoalId, [FromServices] IDeleteFinancialGoalUseCase useCase) =>
             {
-                model.FinancialGoalId = financialGoalId;
-
-                await useCase.ExecuteAsync(model);
+                await useCase.ExecuteAsync(financialGoalId);
 
                 return Results.NoContent();
             }).AddEndpointFilter<ModelStateValidatorFilter<DeleteFinancialGoalUseCaseInputModel>>();

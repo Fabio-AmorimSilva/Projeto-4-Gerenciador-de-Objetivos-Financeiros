@@ -2,5 +2,5 @@
 
 public interface IDeleteFinancialGoalUseCase
 {
-    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(DeleteFinancialGoalUseCaseInputModel model);
+    Task<UseCaseResult<UseCaseResult>> ExecuteAsync(Guid financialGoalId);
 }

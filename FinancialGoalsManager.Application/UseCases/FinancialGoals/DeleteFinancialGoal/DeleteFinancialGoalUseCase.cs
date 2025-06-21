@@ -5,16 +5,16 @@ public sealed class DeleteFinancialGoalUseCase(
     IRequestContextService requestContextService
 ) : IDeleteFinancialGoalUseCase
 {
-    public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(DeleteFinancialGoalUseCaseInputModel model)
+    public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(Guid financialGoalId)
     {
         var user = await context.Users
-            .Include(u => u.FinancialGoals.Where(f => f.Id == model.FinancialGoalId))
+            .Include(u => u.FinancialGoals.Where(f => f.Id == financialGoalId))
             .FirstOrDefaultAsync(u => u.Id == requestContextService.UserId);
 
         if (user is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<User>());
         
-        var financialGoal = user.GetGoal(model.FinancialGoalId);
+        var financialGoal = user.GetGoal(financialGoalId);
         
         if (financialGoal is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<FinancialGoal>());

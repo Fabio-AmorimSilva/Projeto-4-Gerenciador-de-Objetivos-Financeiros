@@ -9,6 +9,7 @@ global using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFina
 global using FinancialGoalsManager.Domain.Common.Interfaces;
 global using FinancialGoalsManager.Domain.Entities;
 global using FinancialGoalsManager.Domain.Entities.Common;
+global using FinancialGoalsManager.Domain.Enums;
 global using FinancialGoalsManager.Infrastructure.Auth;
 global using FinancialGoalsManager.Infrastructure.Auth.Services;
 global using FinancialGoalsManager.Infrastructure.Persistence;

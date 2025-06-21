@@ -1,4 +1,6 @@
-﻿namespace FinancialGoalsManager.Infrastructure.Reports.FinancialGoal;
+﻿using Color = ScottPlot.Color;
+
+namespace FinancialGoalsManager.Infrastructure.Reports.FinancialGoal;
 
 public static class FinancialGoalReport
 {
@@ -33,18 +35,20 @@ public static class FinancialGoalReport
 
                             foreach (var financialGoal in financialGoals)
                             {
-                                bars.Add(new Bar { Position = barIndex, Value = (double)financialGoal.Total } );
+                                bars.Add(new Bar
+                                {
+                                    Position = barIndex,
+                                    Value = (double)financialGoal.Total,
+                                    FillColor = financialGoal.Status == GoalStatus.Success
+                                        ? Color.FromARGB(Colors.Green.Medium.Hex)
+                                        : Color.FromARGB(Colors.Red.Medium.Hex),
+                                    LineWidth = 0,
+                                    Size = 0.15
+                                });
 
                                 barIndex++;
                             }
-
-                            foreach (var bar in bars)
-                            {
-                                bar.FillColor = new ScottPlot.Color(Colors.Blue.Medium.Hex);
-                                bar.LineWidth = 0;
-                                bar.Size = 0.15;
-                            }
-
+                            
                             plot.Add.Bars(bars);
 
                             var ticks = new List<Tick>();
@@ -52,16 +56,35 @@ public static class FinancialGoalReport
 
                             foreach (var financialGoal in financialGoals)
                             {
-                                ticks.Add(new Tick(position: tickIndex, label: $"{financialGoal.Month}/{financialGoal.Year}"));
+                                ticks.Add(new Tick(position: tickIndex,
+                                    label: $"{financialGoal.Month}/{financialGoal.Year} - {financialGoal.FinancialGoalName}"));
 
                                 tickIndex++;
                             }
 
-                            plot.Legend = new Legend(plot);
+                            LegendItem success = new()
+                            {
+                                LineColor = Color.FromARGB(Colors.Green.Medium),
+                                MarkerFillColor = Color.FromARGB(Colors.Green.Medium),
+                                LineWidth = 2,
+                                LabelText = "Success"
+                            };
+
+                            LegendItem failed = new()
+                            {
+                                LineColor = Color.FromARGB(Colors.Red.Medium),
+                                MarkerFillColor = Color.FromARGB(Colors.Red.Medium),
+                                LineWidth = 2,
+                                LabelText = "Failed"
+                            };
+
+                            plot.YLabel("-- BRL - R$ -- ");
+                            plot.XLabel(" -- Period --");
+                            plot.ShowLegend([success, failed]);
                             plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks.ToArray());
                             plot.Axes.Bottom.MajorTickStyle.Length = 0;
                             plot.Axes.Bottom.TickLabelStyle.FontName = "Lato";
-                            plot.Axes.Bottom.TickLabelStyle.FontSize = 16;
+                            plot.Axes.Bottom.TickLabelStyle.FontSize = 8;
                             plot.Axes.Bottom.TickLabelStyle.OffsetY = 8;
                             plot.Grid.XAxisStyle.IsVisible = false;
 
@@ -75,24 +98,4 @@ public static class FinancialGoalReport
 
         return document.GeneratePdf();
     }
-
-    private static IContainer Entry(IContainer container)
-        => container
-            .BorderBottom(2)
-            .PaddingBottom(2)
-            .PaddingVertical(1)
-            .PaddingHorizontal(6)
-            .ShowOnce()
-            .AlignCenter()
-            .AlignMiddle();
-
-    private static IContainer Block(IContainer container)
-        => container
-            .BorderBottom(2)
-            .Background(Colors.Grey.Lighten3)
-            .ShowOnce()
-            .MinWidth(50)
-            .MinWidth(20)
-            .AlignCenter()
-            .AlignMiddle();
 }

@@ -14,7 +14,9 @@ public sealed class FinancialGoalReportService(ITrackFinancialGoalProgress useCa
             {
                 Month = d.Month,
                 Year = d.Year,
-                Total = d.Total
+                Total = d.Total,
+                FinancialGoalName = d.FinancialGoalName,
+                Status = d.Status
             });
 
         var pdf = FinancialGoalReport.GeneratePdf(models);

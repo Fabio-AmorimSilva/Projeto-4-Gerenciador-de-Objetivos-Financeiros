@@ -19,6 +19,7 @@ public sealed class FinancialGoalManagerDbContext(
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.AddInterceptors(new AuditableEntityInterceptor());
+        optionsBuilder.AddInterceptors(new SoftDeleteEntityInterceptor());
         base.OnConfiguring(optionsBuilder);
     }
 

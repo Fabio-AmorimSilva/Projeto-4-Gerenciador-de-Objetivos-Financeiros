@@ -48,6 +48,6 @@ public sealed class FinancialGoalEntityTypeConfiguration : IEntityTypeConfigurat
             .HasOne(fg => fg.User)
             .WithMany(u => u.FinancialGoals)
             .HasForeignKey(fg => fg.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

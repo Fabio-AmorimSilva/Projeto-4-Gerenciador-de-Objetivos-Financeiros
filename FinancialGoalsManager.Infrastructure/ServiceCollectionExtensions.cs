@@ -5,17 +5,17 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<FinancialGoalManagerDbContext>(
-            options => options.UseSqlServer(connectionString: connectionString)
+        services.AddDbContext<FinancialGoalManagerDbContext>(options => options.UseSqlServer(connectionString: connectionString)
         );
-        
+
         services.AddJwtConfig(configuration);
+        services.AddRabbitMq(configuration);
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<IPasswordHashService, PasswordHashService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IFinancialGoalReportService, FinancialGoalReportService>();
         services.AddScoped<IFinancialGoalManagerDbContext>(provider => provider.GetRequiredService<FinancialGoalManagerDbContext>());
-        
+
         return services;
     }
 
@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
     {
         var settings = configuration.GetSection("JwtSettings");
         services.Configure<JwtSettings>(settings);
-        
+
         var appSettings = settings.Get<JwtSettings>();
         var key = Encoding.ASCII.GetBytes(appSettings?.JwtKey!);
 
@@ -45,6 +45,25 @@ public static class ServiceCollectionExtensions
                 ValidIssuer = appSettings?.Emissary
             };
         });
+
+        return services;
+    }
+
+    private static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IRabbitMqPersisterConnection>(sp =>
+        {
+            var settings = sp.GetRequiredService<IOptions<EventBusSettings>>().Value;
+            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersisterConnection>>();
+            var factory = new ConnectionFactory
+            {
+                HostName = settings.EventBusConnection
+            };
+
+            return new DefaultRabbitMqPersisterConnection(factory, logger);
+        });
+
+        services.AddSingleton<IEventBus, RabbitMqEventBus>();
 
         return services;
     }

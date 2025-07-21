@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Infrastructure.EventBus;
+﻿namespace FinancialGoalsManager.Domain.EventBus;
 
 public record IntegrationEvent
 {

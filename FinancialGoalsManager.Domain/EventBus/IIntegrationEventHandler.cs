@@ -1,4 +1,4 @@
-﻿namespace FinancialGoalsManager.Infrastructure.EventBus;
+﻿namespace FinancialGoalsManager.Domain.EventBus;
 
 public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
     where TIntegrationEvent : IntegrationEvent

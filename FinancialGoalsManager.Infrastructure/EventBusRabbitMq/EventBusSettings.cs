@@ -2,5 +2,5 @@
 
 public sealed class EventBusSettings
 {
-    public string EventBusConnection { get; set; } = null!;
+    public string EventBusConnection { get; set; } = string.Empty;
 }

@@ -1,4 +1,8 @@
-﻿namespace Microsoft.Extensions.DependencyInjection;
+﻿using FinancialGoalsManager.Application.IntegrationEvents.EventHandling;
+using FinancialGoalsManager.Infrastructure.Notifications;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
@@ -8,18 +12,31 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<FinancialGoalManagerDbContext>(options => options.UseSqlServer(connectionString: connectionString)
         );
 
+        services.AddScoped<IFinancialGoalManagerDbContext>(provider => provider.GetRequiredService<FinancialGoalManagerDbContext>());
         services.AddJwtConfig(configuration);
-        services.AddRabbitMq(configuration);
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<IPasswordHashService, PasswordHashService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IFinancialGoalReportService, FinancialGoalReportService>();
-        services.AddScoped<IFinancialGoalManagerDbContext>(provider => provider.GetRequiredService<FinancialGoalManagerDbContext>());
-
+        var eventBusSettings = configuration.GetSection("EventBusConnection");
+        services.Configure<EventBusSettings>(eventBusSettings);
+        var eventBusConnection = eventBusSettings.Get<EventBusSettings>();
+        
+        services.AddRabbitMq
+        (
+            connectionUrl: eventBusConnection.EventBusConnection,
+            brokerName: "financialGoalsManagerBroker",
+            queueName: "financialGoalsBusQueue",
+            timeoutBeforeReconnecting: 15
+        );
+        var settings = configuration.GetSection("MailSettings");
+        services.Configure<MailSettings>(settings);
+        services.AddSingleton<IMailService, MailHandlingService>();
+        
         return services;
     }
 
-    private static IServiceCollection AddJwtConfig(this IServiceCollection services, IConfiguration configuration)
+    private static void AddJwtConfig(this IServiceCollection services, IConfiguration configuration)
     {
         var settings = configuration.GetSection("JwtSettings");
         services.Configure<JwtSettings>(settings);
@@ -45,26 +62,36 @@ public static class ServiceCollectionExtensions
                 ValidIssuer = appSettings?.Emissary
             };
         });
-
-        return services;
     }
 
-    private static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
+    private static void AddRabbitMq(
+        this IServiceCollection services,
+        string connectionUrl,
+        string brokerName, 
+        string queueName,
+        int timeoutBeforeReconnecting = 15
+    )
     {
-        services.AddSingleton<IRabbitMqPersisterConnection>(sp =>
+        services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
+        services.AddSingleton<IPersistentConnection, RabbitMQPersistentConnection>(factory =>
         {
-            var settings = sp.GetRequiredService<IOptions<EventBusSettings>>().Value;
-            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersisterConnection>>();
-            var factory = new ConnectionFactory
+            var connectionFactory = new ConnectionFactory
             {
-                HostName = settings.EventBusConnection
+                Uri = new Uri(connectionUrl),
+                DispatchConsumersAsync = true,
             };
 
-            return new DefaultRabbitMqPersisterConnection(factory, logger);
+            var logger = factory.GetService<ILogger<RabbitMQPersistentConnection>>();
+            return new RabbitMQPersistentConnection(connectionFactory, logger, timeoutBeforeReconnecting);
         });
 
-        services.AddSingleton<IEventBus, RabbitMqEventBus>();
+        services.AddSingleton<IEventBus, EventBusRabbitMq>(factory =>
+        {
+            var persistentConnection = factory.GetService<IPersistentConnection>();
+            var subscriptionManager = factory.GetService<IEventBusSubscriptionManager>();
+            var logger = factory.GetService<ILogger<EventBusRabbitMq>>();
 
-        return services;
+            return new EventBusRabbitMq(persistentConnection, subscriptionManager, factory, logger, brokerName, queueName);
+        });
     }
 }

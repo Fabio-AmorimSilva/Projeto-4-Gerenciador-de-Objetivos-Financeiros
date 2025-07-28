@@ -1,14 +1,7 @@
 ﻿namespace FinancialGoalsManager.Domain.EventBus;
 
-public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
-    where TIntegrationEvent : IntegrationEvent
+public interface IIntegrationEventHandler<in TEvent>
+    where TEvent : IntegrationEvent
 {
-    Task Handle(TIntegrationEvent integrationEvent);
-
-    Task IIntegrationEventHandler.Handle(IntegrationEvent @event) => Handle((TIntegrationEvent)@event);
-}
-
-public interface IIntegrationEventHandler
-{
-    Task Handle(IntegrationEvent @event);
+    Task HandleAsync(TEvent @event);
 }

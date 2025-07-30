@@ -7,12 +7,10 @@ public record TransactionCreatedIntegrationEvent : IntegrationEvent
     public DateTime Date { get; set; }
 
     public TransactionCreatedIntegrationEvent(
-        Guid id,
-        DateTime createdAt,
         decimal quantity,
         TransactionType type,
         DateTime date
-    ) : base(id, createdAt)
+    )
     {
         Quantity = quantity;
         Type = type;

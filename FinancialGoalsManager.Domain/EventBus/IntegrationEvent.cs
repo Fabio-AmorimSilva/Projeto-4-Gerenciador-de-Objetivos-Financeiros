@@ -3,17 +3,8 @@
 public record IntegrationEvent
 {
     [JsonIgnore]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     
     [JsonIgnore]
-    public DateTime CreatedAt { get; set; }
-
-    public IntegrationEvent(
-        Guid id,
-        DateTime createdAt
-    )
-    {
-        Id = id;
-        CreatedAt = createdAt;
-    }
+    public DateTime CreatedAt { get; set; } =  DateTime.UtcNow;
 }

@@ -2,7 +2,8 @@
 
 public sealed class DeleteTransactionUseCase(
     IFinancialGoalManagerDbContext context,
-    IRequestContextService requestContextService
+    IRequestContextService requestContextService,
+    IEventBus eventBus
 ) : IDeleteTransactionUseCase
 {
     public async Task<UseCaseResult> ExecuteAsync(Guid transactionId)
@@ -20,6 +21,11 @@ public sealed class DeleteTransactionUseCase(
 
         user.DeleteTransaction(transaction);
         await context.SaveChangesAsync();
+        
+        eventBus.Publish(
+            new TransactionDeletedIntegrationEvent(
+                transactionId: transaction.Id
+            ));
 
         return new NoContentResponse<UseCaseResult>();
     }

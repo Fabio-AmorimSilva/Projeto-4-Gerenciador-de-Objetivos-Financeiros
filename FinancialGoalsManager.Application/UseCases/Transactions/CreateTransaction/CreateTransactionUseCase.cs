@@ -2,7 +2,8 @@
 
 public sealed class CreateTransactionUseCase(
     IFinancialGoalManagerDbContext context,
-    IRequestContextService requestContextService
+    IRequestContextService requestContextService,
+    IEventBus eventBus
 ) : ICreateTransactionUseCase
 {
     public async Task<UseCaseResult<Guid>> ExecuteAsync(Guid financialGoalId, CreateTransactionUseCaseInputModel model)
@@ -29,6 +30,13 @@ public sealed class CreateTransactionUseCase(
 
         user.AddTransaction(transaction);
         await context.SaveChangesAsync();
+        
+        eventBus.Publish(
+            new TransactionCreatedIntegrationEvent(
+                quantity: transaction.Quantity,
+                type: transaction.Type,
+                date: transaction.Date
+            ));
 
         return new CreatedResponse<Guid>(transaction.Id);
     }

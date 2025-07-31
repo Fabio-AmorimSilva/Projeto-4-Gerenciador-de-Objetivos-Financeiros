@@ -24,3 +24,6 @@ global using FinancialGoalsManager.Domain.Models;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
+global using FinancialGoalsManager.Application.IntegrationEvents.EventHandling;
+global using FinancialGoalsManager.Application.IntegrationEvents.Events;
+global using FinancialGoalsManager.Domain.EventBus;

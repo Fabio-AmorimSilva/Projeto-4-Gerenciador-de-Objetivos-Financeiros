@@ -28,3 +28,7 @@ global using FinancialGoalsManager.Domain.Models;
 global using FinancialGoalsManager.Domain.Specifications;
 global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;
+global using FinancialGoalsManager.Application.IntegrationEvents.EventHandling;
+global using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalProgress;
+global using FinancialGoalsManager.Application.UseCases.FinancialGoals.TrackFinancialGoalsReport;
+global using FinancialGoalsManager.Domain.Notifications.Mail;

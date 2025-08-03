@@ -8,6 +8,7 @@ public sealed class GetTransactionUseCase(
     public async Task<UseCaseResult<GetTransactionUseCaseModel>> ExecuteAsync(Guid transactionId)
     {
         var transaction = await context.Users
+            .AsNoTrackingWithIdentityResolution()
             .Where(u => u.Id == requestContextService.UserId)
             .SelectMany(u => u.Transactions.Where(t => t.Id == transactionId))
             .Select(t => new GetTransactionUseCaseModel

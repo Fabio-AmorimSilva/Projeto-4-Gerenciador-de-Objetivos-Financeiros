@@ -8,6 +8,7 @@ public sealed class ListFinancialGoalsUseCase(
     public async Task<UseCaseResult<IEnumerable<ListFinancialGoalsUseCaseModel>>> ExecuteAsync()
     {
         var financialGoals = await context.Users
+            .AsNoTrackingWithIdentityResolution()
             .SelectMany(u => u.FinancialGoals.Where(f => f.UserId == requestContextService.UserId))
             .Select(f => new ListFinancialGoalsUseCaseModel
             {

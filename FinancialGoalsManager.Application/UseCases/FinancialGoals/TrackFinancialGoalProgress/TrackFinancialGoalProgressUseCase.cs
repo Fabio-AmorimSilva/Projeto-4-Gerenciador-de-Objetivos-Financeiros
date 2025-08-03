@@ -5,6 +5,7 @@ public sealed class TrackFinancialGoalProgressUseCase(IFinancialGoalManagerDbCon
     public async Task<UseCaseResult<IEnumerable<TrackFinancialGoalProgressUseCaseOuputModel>>> ExecuteAsync()
     {
         var transactionByMonthAndYear = context.Users
+            .AsNoTracking()
             .SelectMany(u => u.Transactions)
             .GroupBy(t => new
             {
@@ -22,6 +23,7 @@ public sealed class TrackFinancialGoalProgressUseCase(IFinancialGoalManagerDbCon
             });
 
         var transactionByMonthAndYearAndQuantity = context.Users
+            .AsNoTracking()
             .SelectMany(u => u.Transactions)
             .GroupBy(t => new
             {
@@ -37,6 +39,7 @@ public sealed class TrackFinancialGoalProgressUseCase(IFinancialGoalManagerDbCon
             });
 
         var totalByMonthAndYear = transactionByMonthAndYear
+            .AsNoTracking()
             .Select(tym => new
             {
                 tym.Month,
@@ -50,6 +53,7 @@ public sealed class TrackFinancialGoalProgressUseCase(IFinancialGoalManagerDbCon
             });
 
         var trackingByMonthAndYear = await transactionByMonthAndYear
+            .AsNoTracking()
             .Select(tym => new TrackFinancialGoalProgressUseCaseOuputModel
             {
                 Month = tym.Month,

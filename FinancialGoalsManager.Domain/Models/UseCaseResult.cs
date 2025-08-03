@@ -16,7 +16,7 @@ public class UseCaseResult
         };
 
     public static UseCaseResult Error(string message)
-        => new UseCaseResult()
+        => new()
         {
             IsSuccess = false,
             Message = message

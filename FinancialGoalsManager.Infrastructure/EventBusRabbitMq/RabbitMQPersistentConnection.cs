@@ -28,10 +28,7 @@ public class RabbitMQPersistentConnection : IPersistentConnection
 
     public event EventHandler OnReconnectedAfterConnectionFailure;
 
-    public bool IsConnected
-    {
-        get { return (_connection != null) && (_connection.IsOpen) && (!_disposed); }
-    }
+    public bool IsConnected => _connection.IsOpen && !_disposed;
 
     public bool TryConnect()
     {
@@ -43,7 +40,7 @@ public class RabbitMQPersistentConnection : IPersistentConnection
             var policy = Policy
                 .Handle<SocketException>()
                 .Or<BrokerUnreachableException>()
-                .WaitAndRetryForever((duration) => _timeoutBeforeReconnecting,
+                .WaitAndRetryForever((_) => _timeoutBeforeReconnecting,
                     (ex, time) =>
                     {
                         _logger.LogWarning(ex, "RabbitMQ Client could not connect after {TimeOut} seconds ({ExceptionMessage}). Waiting to try again...",
@@ -83,9 +80,7 @@ public class RabbitMQPersistentConnection : IPersistentConnection
     public IModel CreateModel()
     {
         if (!IsConnected)
-        {
             throw new InvalidOperationException("No RabbitMQ connections are available to perform this action.");
-        }
 
         return _connection.CreateModel();
     }
@@ -93,9 +88,7 @@ public class RabbitMQPersistentConnection : IPersistentConnection
     public void Dispose()
     {
         if (_disposed)
-        {
             return;
-        }
 
         _disposed = true;
 

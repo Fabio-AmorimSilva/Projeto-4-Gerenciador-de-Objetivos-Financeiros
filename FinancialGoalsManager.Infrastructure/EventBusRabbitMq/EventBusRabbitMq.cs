@@ -123,9 +123,7 @@ public class EventBusRabbitMq : IEventBus
     private IModel CreateConsumerChannel()
     {
         if (!_persistentConnection.IsConnected)
-        {
             _persistentConnection.TryConnect();
-        }
 
         _logger.LogTrace("Creating RabbitMQ consumer channel...");
 
@@ -180,7 +178,7 @@ public class EventBusRabbitMq : IEventBus
         var eventName = eventArgs.RoutingKey;
         var message = Encoding.UTF8.GetString(eventArgs.Body.Span);
 
-        bool isAcknowledged = false;
+        var isAcknowledged = false;
 
         try
         {
@@ -272,14 +270,10 @@ public class EventBusRabbitMq : IEventBus
     {
         var containsKey = _subscriptionsManager.HasSubscriptionsForEvent(eventName);
         if (containsKey)
-        {
             return;
-        }
 
         if (!_persistentConnection.IsConnected)
-        {
             _persistentConnection.TryConnect();
-        }
 
         using (var channel = _persistentConnection.CreateModel())
         {

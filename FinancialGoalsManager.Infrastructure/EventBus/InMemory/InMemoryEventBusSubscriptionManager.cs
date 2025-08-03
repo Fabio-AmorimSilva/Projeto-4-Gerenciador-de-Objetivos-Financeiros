@@ -5,26 +5,26 @@ namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
 	public class InMemoryEventBusSubscriptionManager : IEventBusSubscriptionManager
 	{
 		#region Fields
-		private readonly Dictionary<string, List<Subscription>> _handlers = new();
-		private readonly List<Type> _eventTypes = new();
+		private readonly Dictionary<string, List<Subscription?>> _handlers = new();
+		private readonly List<Type?> _eventTypes = new();
 		#endregion
 
 		#region Event Handlers
-		public event EventHandler<string> OnEventRemoved;
+		public event EventHandler<string>? OnEventRemoved;
 		#endregion
 
 		#region Events info
 		public string GetEventIdentifier<TEvent>() => typeof(TEvent).Name;
 
-		public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
+		public Type? GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
 
-		public IEnumerable<Subscription> GetHandlersForEvent(string eventName) => _handlers[eventName];
+		public IEnumerable<Subscription?> GetHandlersForEvent(string eventName) => _handlers[eventName];
 
 		/// <summary>
 		/// Returns the dictionary of subscriptiosn in an immutable way.
 		/// </summary>
 		/// <returns>Dictionary.</returns>
-		public Dictionary<string, List<Subscription>> GetAllSubscriptions() => new(_handlers);
+		public Dictionary<string, List<Subscription?>> GetAllSubscriptions() => new(_handlers);
 		#endregion
 
 		#region Subscriptions management
@@ -37,9 +37,7 @@ namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
 			DoAddSubscription(typeof(TEvent), typeof(TEventHandler), eventName);
 
 			if (!_eventTypes.Contains(typeof(TEvent)))
-			{
 				_eventTypes.Add(typeof(TEvent));
-			}
 		}
 
 		public void RemoveSubscription<TEvent, TEventHandler>()
@@ -68,34 +66,26 @@ namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
 		private void DoAddSubscription(Type eventType, Type handlerType, string eventName)
 		{
 			if (!HasSubscriptionsForEvent(eventName))
-			{
-				_handlers.Add(eventName, new List<Subscription>());
-			}
-
+				_handlers.Add(eventName, new List<Subscription?>());
+			
 			if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
-			{
 				throw new ArgumentException($"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
-			}
 
 			_handlers[eventName].Add(new Subscription(eventType, handlerType));
 		}
 
-		private void DoRemoveHandler(string eventName, Subscription subscriptionToRemove)
+		private void DoRemoveHandler(string eventName, Subscription? subscriptionToRemove)
 		{
-			if (subscriptionToRemove == null)
-			{
+			if (subscriptionToRemove is null)
 				return;
-			}
 
 			_handlers[eventName].Remove(subscriptionToRemove);
 			if (_handlers[eventName].Any())
-			{
 				return;
-			}
 
 			_handlers.Remove(eventName);
 			var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
-			if (eventType != null)
+			if (eventType is not null)
 			{
 				_eventTypes.Remove(eventType);
 			}
@@ -109,7 +99,7 @@ namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
 			handler?.Invoke(this, eventName);
 		}
 
-		private Subscription FindSubscriptionToRemove<TEvent, TEventHandler>()
+		private Subscription? FindSubscriptionToRemove<TEvent, TEventHandler>()
 			 where TEvent : IntegrationEvent
 			 where TEventHandler : IIntegrationEventHandler<TEvent>
 		{
@@ -117,15 +107,11 @@ namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
 			return DoFindSubscriptionToRemove(eventName, typeof(TEventHandler));
 		}
 
-		private Subscription DoFindSubscriptionToRemove(string eventName, Type handlerType)
+		private Subscription? DoFindSubscriptionToRemove(string eventName, Type handlerType)
 		{
-			if (!HasSubscriptionsForEvent(eventName))
-			{
-				return null;
-			}
-
-			return _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
-
+			return !HasSubscriptionsForEvent(eventName)
+				? null 
+				: _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
 		}
 		#endregion
 	}

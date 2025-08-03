@@ -13,9 +13,9 @@ public interface IEventBusSubscriptionManager
 
 	#region Events info
 	string GetEventIdentifier<TEvent>();
-	Type GetEventTypeByName(string eventName);
-	IEnumerable<Subscription> GetHandlersForEvent(string eventName);
-	Dictionary<string, List<Subscription>> GetAllSubscriptions();
+	Type? GetEventTypeByName(string eventName);
+	IEnumerable<Subscription?> GetHandlersForEvent(string eventName);
+	Dictionary<string, List<Subscription?>> GetAllSubscriptions();
 	#endregion
 
 	#region Subscription management

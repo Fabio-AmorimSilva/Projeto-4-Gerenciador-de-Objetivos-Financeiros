@@ -24,6 +24,7 @@ public sealed class DeleteTransactionUseCase(
         
         eventBus.Publish(
             new TransactionDeletedIntegrationEvent(
+                financialGoalId: transaction.FinancialGoalId,
                 transactionId: transaction.Id
             ));
 

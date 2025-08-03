@@ -33,6 +33,7 @@ public sealed class CreateTransactionUseCase(
         
         eventBus.Publish(
             new TransactionCreatedIntegrationEvent(
+                financialGoalId: financialGoalId,
                 quantity: transaction.Quantity,
                 type: transaction.Type,
                 date: transaction.Date

@@ -1,8 +1,4 @@
-﻿using FinancialGoalsManager.Application.IntegrationEvents.EventHandling;
-using FinancialGoalsManager.Infrastructure.Notifications;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace Microsoft.Extensions.DependencyInjection;
+﻿namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
@@ -18,21 +14,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPasswordHashService, PasswordHashService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IFinancialGoalReportService, FinancialGoalReportService>();
-        var eventBusSettings = configuration.GetSection("EventBusConnection");
-        services.Configure<EventBusSettings>(eventBusSettings);
-        var eventBusConnection = eventBusSettings.Get<EventBusSettings>();
-        
-        services.AddRabbitMq
-        (
-            connectionUrl: eventBusConnection.EventBusConnection,
-            brokerName: "financialGoalsManagerBroker",
-            queueName: "financialGoalsBusQueue",
-            timeoutBeforeReconnecting: 15
-        );
         var settings = configuration.GetSection("MailSettings");
         services.Configure<MailSettings>(settings);
-        services.AddSingleton<IMailService, MailHandlingService>();
-        
+        services.AddScoped<IMailService, MailHandlingService>();
+
         return services;
     }
 
@@ -61,37 +46,6 @@ public static class ServiceCollectionExtensions
                 ValidAudience = appSettings?.ValidOn,
                 ValidIssuer = appSettings?.Emissary
             };
-        });
-    }
-
-    private static void AddRabbitMq(
-        this IServiceCollection services,
-        string connectionUrl,
-        string brokerName, 
-        string queueName,
-        int timeoutBeforeReconnecting = 15
-    )
-    {
-        services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
-        services.AddSingleton<IPersistentConnection, RabbitMQPersistentConnection>(factory =>
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                Uri = new Uri(connectionUrl),
-                DispatchConsumersAsync = true,
-            };
-
-            var logger = factory.GetService<ILogger<RabbitMQPersistentConnection>>();
-            return new RabbitMQPersistentConnection(connectionFactory, logger, timeoutBeforeReconnecting);
-        });
-
-        services.AddSingleton<IEventBus, EventBusRabbitMq>(factory =>
-        {
-            var persistentConnection = factory.GetService<IPersistentConnection>();
-            var subscriptionManager = factory.GetService<IEventBusSubscriptionManager>();
-            var logger = factory.GetService<ILogger<EventBusRabbitMq>>();
-
-            return new EventBusRabbitMq(persistentConnection, subscriptionManager, factory, logger, brokerName, queueName);
         });
     }
 }

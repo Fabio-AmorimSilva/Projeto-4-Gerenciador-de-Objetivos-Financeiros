@@ -25,7 +25,7 @@ public sealed class FinancialGoalDeletedIntegrationEventHandler(
         
         var html = await File.ReadAllTextAsync(path: @"Templates\\DeleteFinancialGoal\\DeleteFinancialGoalTemplate.html");
         var body = html
-            .Replace("{FinancialGoalName}", @event.Title)
+            .Replace("{FinancialGoalName}", financialGoal.Title)
             .Replace("{UserName}", user.Name)
             .Replace("{CurrentDate}", DateTime.Today.ToShortDateString());
         

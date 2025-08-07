@@ -1,12 +1,16 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder
+    .AddUserProvider()
+    .AddRabbitMq(builder.Configuration);
+
 builder.Services
     .AddOpenApi()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddApi();
-
-builder.Services.AddAuthorization();
+    .AddApi()
+    .AddAuthorization()
+    .AddAuthentication();
 
 var app = builder.Build();
 
@@ -18,6 +22,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.ConfigureEventBusHandlers();
 

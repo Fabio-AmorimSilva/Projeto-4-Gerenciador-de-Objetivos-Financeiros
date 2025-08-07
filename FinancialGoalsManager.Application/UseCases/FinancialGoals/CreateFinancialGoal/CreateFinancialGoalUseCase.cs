@@ -2,7 +2,8 @@
 
 public sealed class CreateFinancialGoalUseCase(
     IFinancialGoalManagerDbContext context,
-    IRequestContextService requestContextService
+    IRequestContextService requestContextService,
+    IEventBus eventBus
 ) : ICreateFinancialGoalUseCase
 {
     public async Task<UseCaseResult<Guid>> ExecuteAsync(CreateFinancialGoalInputModel model)
@@ -10,7 +11,7 @@ public sealed class CreateFinancialGoalUseCase(
         var user = await context.Users
             .Include(u => u.FinancialGoals)
             .FirstOrDefaultAsync(u => u.Id == requestContextService.UserId);
-        
+
         if (user is null)
             return new NotFoundResponse<Guid>(ErrorMessages.NotFound<User>());
 
@@ -24,6 +25,14 @@ public sealed class CreateFinancialGoalUseCase(
 
         user.AddGoal(financialGoal);
         await context.SaveChangesAsync();
+
+        eventBus.Publish(
+            new FinancialGoalCreatedIntegrationEvent(
+                title: financialGoal.Title,
+                goal: financialGoal.Goal,
+                dueDate: financialGoal.DueDate,
+                monthGoal: financialGoal.MonthGoal
+            ));
 
         return new CreatedResponse<Guid>(financialGoal.Id);
     }

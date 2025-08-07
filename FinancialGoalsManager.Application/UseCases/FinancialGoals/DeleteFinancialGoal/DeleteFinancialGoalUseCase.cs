@@ -2,7 +2,8 @@
 
 public sealed class DeleteFinancialGoalUseCase(
     IFinancialGoalManagerDbContext context,
-    IRequestContextService requestContextService
+    IRequestContextService requestContextService,
+    IEventBus eventBus
 ) : IDeleteFinancialGoalUseCase
 {
     public async Task<UseCaseResult<UseCaseResult>> ExecuteAsync(Guid financialGoalId)
@@ -13,14 +14,20 @@ public sealed class DeleteFinancialGoalUseCase(
 
         if (user is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<User>());
-        
+
         var financialGoal = user.GetGoal(financialGoalId);
-        
+
         if (financialGoal is null)
             return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<FinancialGoal>());
-        
+
         user.DeleteGoal(financialGoal);
         await context.SaveChangesAsync();
+
+        eventBus.Publish(
+            new FinancialGoalDeletedIntegrationEvent(
+                financialGoalId: financialGoal.Id
+            )
+        );
 
         return new NoContentResponse<UseCaseResult>();
     }

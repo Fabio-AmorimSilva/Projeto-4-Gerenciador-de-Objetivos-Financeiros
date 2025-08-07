@@ -17,7 +17,7 @@ public static class TransactionEndpoints
 
                 return Results.Ok(response);
             });
-        
+
         mapGroup.MapGet("/{transactionId:guid}",
             [ProducesResponseType(typeof(UseCaseResult<UseCaseResult<GetTransactionUseCaseModel>>), StatusCodes.Status200OK)]
             async ([FromRoute] Guid transactionId, [FromServices] IGetTransactionUseCase useCase) =>
@@ -28,22 +28,24 @@ public static class TransactionEndpoints
             });
 
         mapGroup.MapPost("{financialGoalId:guid}",
-            [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
-            async ([FromRoute] Guid financialGoalId, [FromServices] ICreateTransactionUseCase useCase, [FromBody] CreateTransactionUseCaseInputModel model) =>
-            {
-                var response = await useCase.ExecuteAsync(financialGoalId, model);
+                [ProducesResponseType(typeof(UseCaseResult<Guid>), StatusCodes.Status201Created)]
+                async ([FromRoute] Guid financialGoalId, [FromServices] ICreateTransactionUseCase useCase,
+                    [FromBody] CreateTransactionUseCaseInputModel model) =>
+                {
+                    var response = await useCase.ExecuteAsync(financialGoalId, model);
 
-                return Results.Created(url, response);
-            })
+                    return Results.Created(url, response);
+                })
             .AddEndpointFilter<ModelStateValidatorFilter<CreateTransactionUseCaseInputModel>>();
 
         mapGroup.MapDelete("{transactionId:guid}/delete",
-            [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
-            async ([FromRoute] Guid transactionId, [FromServices] IDeleteTransactionUseCase useCase) =>
-            {
-                await useCase.ExecuteAsync(transactionId);
+                [ProducesResponseType(typeof(UseCaseResult), StatusCodes.Status204NoContent)]
+                async ([FromRoute] Guid transactionId, [FromServices] IDeleteTransactionUseCase useCase) =>
+                {
+                    await useCase.ExecuteAsync(transactionId);
 
-                return Results.NoContent();
-            });
+                    return Results.NoContent();
+                })
+            .AddEndpointFilter<ModelStateValidatorFilter<DeleteTransactionUseCaseInputModel>>();
     }
 }

@@ -9,8 +9,7 @@ public class EventBusRabbitMq : IEventBus
 
     private readonly IPersistentConnection _persistentConnection;
     private readonly IEventBusSubscriptionManager _subscriptionsManager;
-    private readonly IServiceProvider _serviceProvider;
-    
+    private readonly ILifetimeScope _serviceProvider;
     private readonly ILogger<EventBusRabbitMq> _logger;
 
     private IModel _consumerChannel;
@@ -18,17 +17,18 @@ public class EventBusRabbitMq : IEventBus
     public EventBusRabbitMq(
         IPersistentConnection persistentConnection,
         IEventBusSubscriptionManager subscriptionsManager,
-        IServiceProvider serviceProvider,
-        ILogger<EventBusRabbitMq> logger,
+        ILifetimeScope serviceProvider,
         string brokerName,
-        string queueName)
+        string queueName,
+        ILogger<EventBusRabbitMq> logger
+    )
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _subscriptionsManager = subscriptionsManager ?? throw new ArgumentNullException(nameof(subscriptionsManager));
         _serviceProvider = serviceProvider;
-        _logger = logger;
         _exchangeName = brokerName ?? throw new ArgumentNullException(nameof(brokerName));
         _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
+        _logger = logger;
 
         ConfigureMessageBroker();
     }
@@ -68,8 +68,6 @@ public class EventBusRabbitMq : IEventBus
             {
                 var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2;
-
-                _logger.LogTrace("Publishing event to RabbitMQ with ID #{EventId}...", @event.Id);
 
                 channel.BasicPublish(
                     exchange: _exchangeName,
@@ -139,14 +137,8 @@ public class EventBusRabbitMq : IEventBus
             arguments: null
         );
 
-        channel.CallbackException += (sender, ea) =>
-        {
-            _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel...");
-            DoCreateConsumerChannel();
-        };
+        channel.CallbackException += (sender, ea) => { DoCreateConsumerChannel(); };
 
-        _logger.LogTrace("Created RabbitMQ consumer channel.");
-        
         return channel;
     }
 
@@ -230,8 +222,8 @@ public class EventBusRabbitMq : IEventBus
         var subscriptions = _subscriptionsManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            var handler = _serviceProvider.GetService(subscription.HandlerType);
-            if (handler == null)
+            var handler = _serviceProvider.Resolve(subscription.HandlerType);
+            if (handler is null)
             {
                 _logger.LogWarning("There are no handlers for the following event: {EventName}", eventName);
                 continue;
@@ -242,10 +234,10 @@ public class EventBusRabbitMq : IEventBus
             var @event = JsonSerializer.Deserialize(message, eventType);
             var eventHandlerType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
             await Task.Yield();
-            await (Task)eventHandlerType.GetMethod(nameof(IIntegrationEventHandler<IntegrationEvent>.HandleAsync)).Invoke(handler, new object[] { @event });
-        }
+            await (Task)eventHandlerType.GetMethod(nameof(IIntegrationEventHandler<IntegrationEvent>.HandleAsync)).Invoke(handler, new[] { @event });
 
-        _logger.LogTrace("Processed event {EventName}.", eventName);
+            _logger.LogTrace("Processed event {EventName}.", eventName);
+        }
     }
 
     private void SubscriptionManager_OnEventRemoved(object sender, string eventName)
@@ -270,10 +262,14 @@ public class EventBusRabbitMq : IEventBus
     {
         var containsKey = _subscriptionsManager.HasSubscriptionsForEvent(eventName);
         if (containsKey)
+        {
             return;
+        }
 
         if (!_persistentConnection.IsConnected)
+        {
             _persistentConnection.TryConnect();
+        }
 
         using (var channel = _persistentConnection.CreateModel())
         {
@@ -299,7 +295,7 @@ public class EventBusRabbitMq : IEventBus
         var subscriptions = _subscriptionsManager.GetAllSubscriptions();
         _subscriptionsManager.Clear();
 
-        Type eventBusType = this.GetType();
+        var eventBusType = GetType();
         MethodInfo genericSubscribe;
 
         foreach (var entry in subscriptions)

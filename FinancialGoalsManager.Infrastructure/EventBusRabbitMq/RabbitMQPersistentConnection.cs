@@ -1,6 +1,6 @@
 ﻿namespace FinancialGoalsManager.Infrastructure.EventBusRabbitMq;
 
-public class RabbitMQPersistentConnection : IPersistentConnection
+public class RabbitMqPersistentConnection : IPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
     private readonly TimeSpan _timeoutBeforeReconnecting;
@@ -8,27 +8,24 @@ public class RabbitMQPersistentConnection : IPersistentConnection
     private IConnection _connection;
     private bool _disposed;
 
-    private readonly object _locker = new object();
+    private readonly Lock _locker = new();
 
-    private readonly ILogger<RabbitMQPersistentConnection> _logger;
+    private readonly ILogger<RabbitMqPersistentConnection> _logger;
 
-    private bool _connectionFailed = false;
+    private bool _connectionFailed;
 
-    public RabbitMQPersistentConnection
-    (
+    public RabbitMqPersistentConnection(
         IConnectionFactory connectionFactory,
-        ILogger<RabbitMQPersistentConnection> logger,
-        int timeoutBeforeReconnecting = 15
+        ILogger<RabbitMqPersistentConnection> logger
     )
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _logger = logger;
-        _timeoutBeforeReconnecting = TimeSpan.FromSeconds(timeoutBeforeReconnecting);
     }
 
     public event EventHandler OnReconnectedAfterConnectionFailure;
 
-    public bool IsConnected => _connection.IsOpen && !_disposed;
+    public bool IsConnected => _connection is not null && _connection.IsOpen && !_disposed;
 
     public bool TryConnect()
     {
@@ -36,7 +33,6 @@ public class RabbitMQPersistentConnection : IPersistentConnection
 
         lock (_locker)
         {
-            // Creates a policy to retry connecting to message broker until it succeds.
             var policy = Policy
                 .Handle<SocketException>()
                 .Or<BrokerUnreachableException>()
@@ -51,12 +47,10 @@ public class RabbitMQPersistentConnection : IPersistentConnection
 
             if (!IsConnected)
             {
-                _logger.LogCritical("ERROR: could not connect to RabbitMQ.");
                 _connectionFailed = true;
                 return false;
             }
 
-            // These event handlers hadle situations where the connection is lost by any reason. They try to reconnect the client.
             _connection.ConnectionShutdown += OnConnectionShutdown;
             _connection.CallbackException += OnCallbackException;
             _connection.ConnectionBlocked += OnConnectionBlocked;
@@ -65,8 +59,6 @@ public class RabbitMQPersistentConnection : IPersistentConnection
             _logger.LogInformation("RabbitMQ Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
                 _connection.Endpoint.HostName);
 
-            // If the connection has failed previously because of a RabbitMQ shutdown or something similar, we need to guarantee that the exchange and queues exist again.
-            // It's also necessary to rebind all application event handlers. We use this event handler below to do this.
             if (_connectionFailed)
             {
                 OnReconnectedAfterConnectionFailure?.Invoke(this, null);

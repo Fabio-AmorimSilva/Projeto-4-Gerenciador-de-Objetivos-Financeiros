@@ -2,7 +2,13 @@
 
 public class MailHandlingService(IOptions<MailSettings> options) : IMailService
 {
-    public async Task<string> SendEmailAsync(string from, string to, string password, string subject, string body)
+    public async Task<string> SendEmailAsync(
+        string from,
+        string to,
+        string password,
+        string subject,
+        string body
+    )
     {
         try
         {

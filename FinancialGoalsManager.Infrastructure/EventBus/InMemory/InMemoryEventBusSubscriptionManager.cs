@@ -1,118 +1,109 @@
-﻿using FinancialGoalsManager.Domain.EventBus.Subscriptions;
+﻿namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory;
 
-namespace FinancialGoalsManager.Infrastructure.EventBus.InMemory
+public class InMemoryEventBusSubscriptionManager : IEventBusSubscriptionManager
 {
-	public class InMemoryEventBusSubscriptionManager : IEventBusSubscriptionManager
-	{
-		#region Fields
-		private readonly Dictionary<string, List<Subscription?>> _handlers = new();
-		private readonly List<Type?> _eventTypes = new();
-		#endregion
+    private readonly Dictionary<string, List<Subscription>> _handlers = new();
+    private readonly List<Type> _eventTypes = [];
 
-		#region Event Handlers
-		public event EventHandler<string>? OnEventRemoved;
-		#endregion
+    public event EventHandler<string> OnEventRemoved;
 
-		#region Events info
-		public string GetEventIdentifier<TEvent>() => typeof(TEvent).Name;
+    public string GetEventIdentifier<TEvent>() => typeof(TEvent).Name;
 
-		public Type? GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
+    public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
 
-		public IEnumerable<Subscription?> GetHandlersForEvent(string eventName) => _handlers[eventName];
+    public IEnumerable<Subscription> GetHandlersForEvent(string eventName) => _handlers[eventName];
 
-		/// <summary>
-		/// Returns the dictionary of subscriptiosn in an immutable way.
-		/// </summary>
-		/// <returns>Dictionary.</returns>
-		public Dictionary<string, List<Subscription?>> GetAllSubscriptions() => new(_handlers);
-		#endregion
+    public Dictionary<string, List<Subscription>> GetAllSubscriptions() => new(_handlers);
 
-		#region Subscriptions management
-		public void AddSubscription<TEvent, TEventHandler>()
-			where TEvent : IntegrationEvent
-			where TEventHandler : IIntegrationEventHandler<TEvent>
-		{
-			var eventName = GetEventIdentifier<TEvent>();
+    public void AddSubscription<TEvent, TEventHandler>()
+        where TEvent : IntegrationEvent
+        where TEventHandler : IIntegrationEventHandler<TEvent>
+    {
+        var eventName = GetEventIdentifier<TEvent>();
 
-			DoAddSubscription(typeof(TEvent), typeof(TEventHandler), eventName);
+        DoAddSubscription(typeof(TEvent), typeof(TEventHandler), eventName);
 
-			if (!_eventTypes.Contains(typeof(TEvent)))
-				_eventTypes.Add(typeof(TEvent));
-		}
+        if (!_eventTypes.Contains(typeof(TEvent)))
+        {
+            _eventTypes.Add(typeof(TEvent));
+        }
+    }
 
-		public void RemoveSubscription<TEvent, TEventHandler>()
-			where TEventHandler : IIntegrationEventHandler<TEvent>
-			where TEvent : IntegrationEvent
-		{
-			var handlerToRemove = FindSubscriptionToRemove<TEvent, TEventHandler>();
-			var eventName = GetEventIdentifier<TEvent>();
-			DoRemoveHandler(eventName, handlerToRemove);
-		}
+    public void RemoveSubscription<TEvent, TEventHandler>()
+        where TEventHandler : IIntegrationEventHandler<TEvent>
+        where TEvent : IntegrationEvent
+    {
+        var handlerToRemove = FindSubscriptionToRemove<TEvent, TEventHandler>();
+        var eventName = GetEventIdentifier<TEvent>();
+        DoRemoveHandler(eventName, handlerToRemove);
+    }
 
-		public void Clear()
-		{
-			_handlers.Clear();
-			_eventTypes.Clear();
-		}
-		#endregion
+    public void Clear()
+    {
+        _handlers.Clear();
+        _eventTypes.Clear();
+    }
 
-		#region Status
-		public bool IsEmpty => !_handlers.Keys.Any();
+    public bool IsEmpty => !_handlers.Keys.Any();
 
-		public bool HasSubscriptionsForEvent(string eventName) => _handlers.ContainsKey(eventName);
-		#endregion
+    public bool HasSubscriptionsForEvent(string eventName) => _handlers.ContainsKey(eventName);
 
-		#region Private methods
-		private void DoAddSubscription(Type eventType, Type handlerType, string eventName)
-		{
-			if (!HasSubscriptionsForEvent(eventName))
-				_handlers.Add(eventName, new List<Subscription?>());
-			
-			if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
-				throw new ArgumentException($"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
+    private void DoAddSubscription(Type eventType, Type handlerType, string eventName)
+    {
+        if (!HasSubscriptionsForEvent(eventName))
+        {
+            _handlers.Add(eventName, new List<Subscription>());
+        }
 
-			_handlers[eventName].Add(new Subscription(eventType, handlerType));
-		}
+        if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
+        {
+            throw new ArgumentException($"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
+        }
 
-		private void DoRemoveHandler(string eventName, Subscription? subscriptionToRemove)
-		{
-			if (subscriptionToRemove is null)
-				return;
+        _handlers[eventName].Add(new Subscription(eventType, handlerType));
+    }
 
-			_handlers[eventName].Remove(subscriptionToRemove);
-			if (_handlers[eventName].Any())
-				return;
+    private void DoRemoveHandler(string eventName, Subscription subscriptionToRemove)
+    {
+        if (subscriptionToRemove == null)
+        {
+            return;
+        }
 
-			_handlers.Remove(eventName);
-			var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
-			if (eventType is not null)
-			{
-				_eventTypes.Remove(eventType);
-			}
+        _handlers[eventName].Remove(subscriptionToRemove);
+        if (_handlers[eventName].Any())
+        {
+            return;
+        }
 
-			RaiseOnEventRemoved(eventName);
-		}
+        _handlers.Remove(eventName);
+        var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
+        if (eventType != null)
+        {
+            _eventTypes.Remove(eventType);
+        }
 
-		private void RaiseOnEventRemoved(string eventName)
-		{
-			var handler = OnEventRemoved;
-			handler?.Invoke(this, eventName);
-		}
+        RaiseOnEventRemoved(eventName);
+    }
 
-		private Subscription? FindSubscriptionToRemove<TEvent, TEventHandler>()
-			 where TEvent : IntegrationEvent
-			 where TEventHandler : IIntegrationEventHandler<TEvent>
-		{
-			var eventName = GetEventIdentifier<TEvent>();
-			return DoFindSubscriptionToRemove(eventName, typeof(TEventHandler));
-		}
+    private void RaiseOnEventRemoved(string eventName)
+    {
+        var handler = OnEventRemoved;
+        handler?.Invoke(this, eventName);
+    }
 
-		private Subscription? DoFindSubscriptionToRemove(string eventName, Type handlerType)
-		{
-			return !HasSubscriptionsForEvent(eventName)
-				? null 
-				: _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
-		}
-		#endregion
-	}
+    private Subscription FindSubscriptionToRemove<TEvent, TEventHandler>()
+        where TEvent : IntegrationEvent
+        where TEventHandler : IIntegrationEventHandler<TEvent>
+    {
+        var eventName = GetEventIdentifier<TEvent>();
+        return DoFindSubscriptionToRemove(eventName, typeof(TEventHandler));
+    }
+
+    private Subscription DoFindSubscriptionToRemove(string eventName, Type handlerType)
+    {
+        return !HasSubscriptionsForEvent(eventName)
+            ? null
+            : _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
+    }
 }

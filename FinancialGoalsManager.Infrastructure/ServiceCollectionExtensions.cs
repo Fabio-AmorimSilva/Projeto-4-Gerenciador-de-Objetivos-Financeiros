@@ -2,11 +2,13 @@
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<FinancialGoalManagerDbContext>(options => options.UseSqlServer(connectionString: connectionString)
-        );
+        services.AddDbContext<FinancialGoalManagerDbContext>(options => options.UseSqlServer(connectionString: connectionString));
 
         services.AddScoped<IFinancialGoalManagerDbContext>(provider => provider.GetRequiredService<FinancialGoalManagerDbContext>());
         services.AddJwtConfig(configuration);
@@ -14,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPasswordHashService, PasswordHashService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IFinancialGoalReportService, FinancialGoalReportService>();
+
         var settings = configuration.GetSection("MailSettings");
         services.Configure<MailSettings>(settings);
         services.AddScoped<IMailService, MailHandlingService>();
@@ -21,7 +24,10 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    private static void AddJwtConfig(this IServiceCollection services, IConfiguration configuration)
+    private static void AddJwtConfig(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var settings = configuration.GetSection("JwtSettings");
         services.Configure<JwtSettings>(settings);

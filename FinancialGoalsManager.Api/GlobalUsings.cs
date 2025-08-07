@@ -1,4 +1,6 @@
 global using System.Security.Claims;
+global using Autofac;
+global using Autofac.Extensions.DependencyInjection;
 global using FinancialGoalsManager.Api.Endpoints;
 global using FinancialGoalsManager.Api.Filters;
 global using FinancialGoalsManager.Api.Services;
@@ -27,3 +29,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using FinancialGoalsManager.Application.IntegrationEvents.EventHandling;
 global using FinancialGoalsManager.Application.IntegrationEvents.Events;
 global using FinancialGoalsManager.Domain.EventBus;
+global using FinancialGoalsManager.Domain.EventBus.Subscriptions;
+global using FinancialGoalsManager.Infrastructure.EventBus.InMemory;
+global using FinancialGoalsManager.Infrastructure.EventBusRabbitMq;
+global using RabbitMQ.Client;

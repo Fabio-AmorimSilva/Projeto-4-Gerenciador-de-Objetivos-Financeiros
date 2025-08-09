@@ -17,9 +17,6 @@ public sealed class DeleteFinancialGoalUseCase(
 
         var financialGoal = user.GetGoal(financialGoalId);
 
-        if (financialGoal is null)
-            return new NotFoundResponse<UseCaseResult>(ErrorMessages.NotFound<FinancialGoal>());
-
         user.DeleteGoal(financialGoal);
         await context.SaveChangesAsync();
 

@@ -17,8 +17,6 @@ public sealed class CreateTransactionUseCase(
             return new NotFoundResponse<Guid>(ErrorMessages.NotFound<User>());
 
         var financialGoal = user.GetGoal(financialGoalId);
-        if (financialGoal is null)
-            return new NotFoundResponse<Guid>(ErrorMessages.NotFound<FinancialGoal>());
 
         var transaction = new Transaction(
             quantity: model.Quantity,
@@ -30,7 +28,7 @@ public sealed class CreateTransactionUseCase(
 
         user.AddTransaction(transaction);
         await context.SaveChangesAsync();
-        
+
         eventBus.Publish(
             new TransactionCreatedIntegrationEvent(
                 financialGoalId: financialGoalId,

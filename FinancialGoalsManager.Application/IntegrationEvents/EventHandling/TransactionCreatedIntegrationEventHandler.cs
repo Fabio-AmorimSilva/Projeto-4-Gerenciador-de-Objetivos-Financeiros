@@ -19,8 +19,6 @@ public class TransactionCreatedIntegrationEventHandler(
             throw new NotFoundException(ErrorMessages.NotFound<User>());
         
         var financialGoal = user.GetGoal(financialGoalId: @event.FinancialGoalId);
-        if (financialGoal is null)
-            throw new NotFoundException(ErrorMessages.NotFound<FinancialGoal>());
         
         var html = await File.ReadAllTextAsync(path: @"Templates\\CreateTransaction\\CreateTransactionTemplate.html");
         var body = html

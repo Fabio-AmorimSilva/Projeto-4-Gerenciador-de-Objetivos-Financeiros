@@ -28,4 +28,6 @@ Envia emails para determinadas ações no sistema:
 
 - Representação em UML das classes
 
-![DomainLayer.png]("./DomainLayer.png")
+<a href="https://github.com/Fabio-AmorimSilva/Projeto-4-Gerenciador-de-Objetivos-Financeiros?tab=readme-ov-file">
+  <img align="center" src="./DomainLayer.png" />
+</a>

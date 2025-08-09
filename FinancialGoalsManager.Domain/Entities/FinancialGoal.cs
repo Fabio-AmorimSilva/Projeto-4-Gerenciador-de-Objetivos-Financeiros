@@ -68,4 +68,9 @@ public sealed class FinancialGoal : SoftDeleteEntity
         
         Total += total;
     }
+
+    public void DecreaseTotal(decimal amount)
+    {
+        Total -= amount;
+    }
 }

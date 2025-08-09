@@ -106,6 +106,10 @@ public class User : SoftDeleteEntity
     
     public void DeleteTransaction(Transaction transaction)
     {
+        var financialGoal = GetGoal(transaction.FinancialGoalId);
+        
+        financialGoal.DecreaseTotal(transaction.Quantity);
+
         _transactions.Remove(transaction);
     }
     
